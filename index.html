@@ -26,7 +26,16 @@
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
-
+  <script type="text/javascript"
+  src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+</script>
+  <script>
+    (function(){
+      emailjs.init("c19WeGAPM6D-I6d_U");
+    })();
+  </script>
+  <script src="script.js"></script>
+  
 
 </head>
 
@@ -491,7 +500,7 @@
 
           </div>
           <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch">
-            <form action="send-email.php" method="post" role="form" class="php-email-form">
+            <form id="contact-form" role="form" class="php-email-form">
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="name">Your Name</label>
@@ -508,16 +517,19 @@
                 </div>
                 <div class="form-group">
                     <label for="message">Message</label>
-                    <textarea class="form-control" name="message" rows="10" required></textarea>
+                    <textarea class="form-control" id="message" name="message" rows="10" required></textarea>
                 </div>
                 <div class="my-3">
                     <div class="loading">Loading</div>
                     <div class="error-message"></div>
                     <div class="sent-message">Your message has been sent. Thank you!</div>
                 </div>
-                <div class="text-center"><button type="submit">Send Message</button></div>
+                <div class="text-center">
+                    <button type="submit" onclick="sendEmail(event)">Send Message</button>
+                </div>
             </form>
         </div>
+        
         
 
         </div>
