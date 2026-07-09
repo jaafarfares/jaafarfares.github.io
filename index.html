@@ -1,702 +1,556 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Jaafar Fares — Full-Stack Mobile & Web Engineer</title>
+<meta name="description" content="Full-stack mobile & web engineer shipping production apps for iOS, Android and web. 12+ apps published, most still live." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#0B0E1A;
+    --ink-2:#111629;
+    --ink-3:#1A2138;
+    --line:rgba(190,200,230,.12);
+    --line-2:rgba(190,200,230,.22);
+    --paper:#ECEBE4;
+    --paper-dim:#9AA3BE;
+    --paper-mute:#6B7492;
+    --iris:#7B6CF6;
+    --iris-bright:#9A8CFF;
+    --mint:#3DD6A0;
+    --amber:#F5A623;
+    --font-display:"Space Grotesk",system-ui,sans-serif;
+    --font-body:"Instrument Sans",system-ui,sans-serif;
+    --font-mono:"JetBrains Mono",ui-monospace,monospace;
+    --maxw:1180px;
+  }
 
-  <title>Jaafar Fares Personal Website</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:var(--font-body);
+    font-size:17px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(1100px 600px at 78% -8%, rgba(123,108,246,.16), transparent 60%),
+      radial-gradient(800px 500px at 8% 12%, rgba(61,214,160,.07), transparent 55%);
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;position:relative;z-index:1}
 
-  <!-- Favicons -->
-  <link href="assets/img/fav.jpg" rel="icon">
-  <link href="assets/img/fav.jpg" rel="apple-touch-icon">
+  a{color:inherit;text-decoration:none}
+  .mono{font-family:var(--font-mono)}
+  .eyebrow{
+    font-family:var(--font-mono);font-size:12.5px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--paper-dim);
+  }
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(12px);
+    background:rgba(11,14,26,.72);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{font-family:var(--font-mono);font-weight:600;letter-spacing:.04em;font-size:15px}
+  .brand b{color:var(--iris-bright)}
+  .nav-links{display:flex;gap:30px;align-items:center}
+  .nav-links a{font-size:14px;color:var(--paper-dim);transition:color .2s}
+  .nav-links a:hover{color:var(--paper)}
+  .nav-cta{
+    font-family:var(--font-mono);font-size:13px;color:var(--ink)!important;
+    background:var(--paper);padding:9px 16px;border-radius:8px;font-weight:600;
+    transition:transform .2s, background .2s;
+  }
+  .nav-cta:hover{background:var(--iris-bright);transform:translateY(-1px)}
+  @media(max-width:720px){.nav-links a:not(.nav-cta){display:none}}
 
-  <!-- Vendor CSS Files -->
-  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  /* ---------- HERO ---------- */
+  header.hero{padding:76px 0 40px}
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+  .status-row{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0 22px}
+  .chip{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:var(--font-mono);font-size:12.5px;
+    padding:7px 13px;border-radius:100px;border:1px solid var(--line-2);
+    color:var(--paper-dim);
+  }
+  .chip .dot{width:7px;height:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 0 rgba(61,214,160,.5)}
+  .chip.live .dot{animation:pulse 2.4s infinite}
+  .chip.iris{color:var(--iris-bright);border-color:rgba(123,108,246,.4)}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(61,214,160,.45)}70%{box-shadow:0 0 0 7px rgba(61,214,160,0)}100%{box-shadow:0 0 0 0 rgba(61,214,160,0)}}
 
-  <!-- Template Main CSS File -->
-  <link href="assets/css/style.css" rel="stylesheet">
-  <!-- Privacy-friendly analytics loads from shared site config -->
-  <script defer src="assets/js/site-config.js"></script>
-  <script defer src="assets/js/analytics.js"></script>
-  <script type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
-</script>
-  <script>
-    (function(){
-      emailjs.init("c19WeGAPM6D-I6d_U");
-    })();
-  </script>
-  <script src="script.js"></script>
-  
+  h1.title{
+    font-family:var(--font-display);font-weight:600;
+    font-size:clamp(38px,6.2vw,68px);line-height:1.02;letter-spacing:-.02em;
+  }
+  h1.title .accent{color:var(--iris-bright)}
+  .lede{margin-top:20px;max-width:30ch;color:var(--paper-dim);font-size:clamp(16px,1.6vw,18.5px)}
+  .lede b{color:var(--paper);font-weight:600}
+  .cta-row{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap}
+  .btn{
+    font-family:var(--font-mono);font-size:14px;font-weight:600;
+    padding:13px 22px;border-radius:10px;cursor:pointer;
+    transition:transform .2s,background .2s,border-color .2s;
+    display:inline-flex;align-items:center;gap:9px;border:1px solid transparent;
+  }
+  .btn-primary{background:var(--iris);color:#fff}
+  .btn-primary:hover{background:var(--iris-bright);transform:translateY(-2px)}
+  .btn-ghost{border-color:var(--line-2);color:var(--paper)}
+  .btn-ghost:hover{border-color:var(--paper);transform:translateY(-2px)}
 
+  /* ---------- PHONE (hero signature) ---------- */
+  .phone-stage{display:flex;justify-content:center;perspective:1400px}
+  .phone{
+    width:270px;height:560px;border-radius:44px;
+    background:linear-gradient(160deg,#20263c,#0d1120);
+    padding:11px;position:relative;
+    box-shadow:0 40px 80px -30px rgba(0,0,0,.75), 0 0 0 1px rgba(255,255,255,.05) inset;
+    transform-style:preserve-3d;transition:transform .25s ease-out;
+  }
+  .phone::after{content:"";position:absolute;top:20px;left:50%;transform:translateX(-50%);
+    width:96px;height:26px;background:#05070e;border-radius:100px;z-index:6}
+  .screen{position:absolute;inset:11px;border-radius:34px;overflow:hidden;background:#05070e}
+  .app-screen{position:absolute;inset:0;opacity:0;transition:opacity .7s ease;display:flex;flex-direction:column}
+  .app-screen.on{opacity:1}
+  .sbar{display:flex;justify-content:space-between;align-items:center;padding:16px 22px 0;font-family:var(--font-mono);font-size:11px;color:rgba(255,255,255,.85)}
+  .sbar span:last-child{letter-spacing:.1em}
+  .app-body{flex:1;padding:44px 20px 20px;display:flex;flex-direction:column;gap:13px}
+  .app-name{font-family:var(--font-display);font-weight:600;font-size:23px;color:#fff;letter-spacing:-.01em}
+  .app-tag{font-size:12px;color:rgba(255,255,255,.6);margin-top:-8px;font-family:var(--font-mono)}
+  .app-hero-card{height:120px;border-radius:18px;margin-top:6px;position:relative;overflow:hidden}
+  .app-hero-card::after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.22),transparent 60%)}
+  .app-row{display:flex;gap:10px}
+  .app-pill{flex:1;height:34px;border-radius:11px;background:rgba(255,255,255,.08)}
+  .app-pill.accent{background:var(--ac)}
+  .app-line{height:12px;border-radius:6px;background:rgba(255,255,255,.09)}
+  .app-line.s{width:55%}
+  .app-nav{height:56px;border-radius:16px;background:rgba(255,255,255,.06);margin-top:auto;display:flex;align-items:center;justify-content:space-around;padding:0 16px}
+  .app-nav i{width:22px;height:22px;border-radius:7px;background:rgba(255,255,255,.14);display:block}
+  .app-nav i.act{background:var(--ac)}
+
+  /* ---------- STAT STRIP ---------- */
+  .stats{
+    display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:52px;
+    border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--ink-2);
+  }
+  .stat{padding:20px 22px;border-right:1px solid var(--line)}
+  .stat:last-child{border-right:none}
+  .stat b{font-family:var(--font-display);font-size:26px;font-weight:600;display:block;letter-spacing:-.01em}
+  .stat span{font-family:var(--font-mono);font-size:11px;color:var(--paper-mute);text-transform:uppercase;letter-spacing:.09em}
+  @media(max-width:820px){.stats{grid-template-columns:repeat(2,1fr)}.stat:nth-child(2){border-right:none}.stat{border-bottom:1px solid var(--line)}}
+
+  /* ---------- SECTIONS ---------- */
+  section{padding:80px 0}
+  .sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:36px;border-bottom:1px solid var(--line);padding-bottom:18px}
+  .sec-num{font-family:var(--font-mono);color:var(--iris-bright);font-size:14px}
+  .sec-head h2{font-family:var(--font-display);font-weight:600;font-size:clamp(24px,3.4vw,34px);letter-spacing:-.01em}
+  .sec-head .count{margin-left:auto;font-family:var(--font-mono);font-size:12.5px;color:var(--paper-mute)}
+  @media(max-width:600px){.sec-head .count{display:none}}
+
+  /* ---------- PROJECT CARDS ---------- */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:600px){.grid{grid-template-columns:1fr}}
+
+  .card{
+    background:var(--ink-2);border:1px solid var(--line);border-radius:18px;
+    padding:22px;position:relative;overflow:hidden;
+    transition:transform .3s,border-color .3s,background .3s;
+  }
+  .card:hover{transform:translateY(-4px);border-color:var(--line-2);background:var(--ink-3)}
+  .card::before{content:"";position:absolute;left:0;top:0;height:3px;width:100%;background:var(--ac);opacity:.85}
+  .card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .card-cat{font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--paper-mute)}
+  .live-tag{font-family:var(--font-mono);font-size:10.5px;color:var(--mint);display:inline-flex;align-items:center;gap:6px}
+  .live-tag::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--mint)}
+  .card h3{font-family:var(--font-display);font-weight:600;font-size:21px;margin-bottom:6px;letter-spacing:-.01em}
+  .card p{font-size:14.5px;color:var(--paper-dim);min-height:44px}
+  .spec{margin-top:16px;border-top:1px solid var(--line);padding-top:14px;display:grid;gap:9px}
+  .spec-row{display:flex;font-family:var(--font-mono);font-size:12px}
+  .spec-row .k{color:var(--paper-mute);width:66px;flex-shrink:0}
+  .spec-row .v{color:var(--paper-dim)}
+  .spec-row .v b{color:var(--paper);font-weight:500}
+  .badges{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+  .badge{font-family:var(--font-mono);font-size:11px;padding:6px 11px;border:1px solid var(--line-2);border-radius:8px;color:var(--paper-dim);display:inline-flex;gap:6px;align-items:center;transition:border-color .2s,color .2s}
+  .badge:hover{border-color:var(--iris);color:var(--paper)}
+  .badge.ph{opacity:.5}
+
+  /* browser frame variant */
+  .card.web{padding:0}
+  .browser{background:#0d1120}
+  .b-bar{display:flex;align-items:center;gap:7px;padding:12px 16px;border-bottom:1px solid var(--line)}
+  .b-bar i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.15)}
+  .b-url{margin-left:8px;font-family:var(--font-mono);font-size:11px;color:var(--paper-mute);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .b-view{height:118px;background:linear-gradient(135deg,var(--ac),transparent 75%),#0d1120;position:relative}
+  .b-view::after{content:"";position:absolute;left:18px;right:18px;bottom:16px;height:9px;border-radius:5px;background:rgba(255,255,255,.14)}
+  .b-view::before{content:"";position:absolute;left:18px;top:20px;width:44%;height:15px;border-radius:6px;background:rgba(255,255,255,.2)}
+  .web .card-body{padding:20px 22px 24px}
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:44px}
+  @media(max-width:820px){.about-grid{grid-template-columns:1fr;gap:28px}}
+  .about-grid p{color:var(--paper-dim);margin-bottom:16px;font-size:16px}
+  .about-grid p b{color:var(--paper);font-weight:600}
+  .bluecard{border:1px solid rgba(123,108,246,.35);background:rgba(123,108,246,.08);border-radius:14px;padding:16px 18px;margin-top:8px;display:flex;gap:13px;align-items:flex-start}
+  .bluecard .ic{font-family:var(--font-mono);color:var(--iris-bright);font-size:13px;margin-top:2px}
+  .bluecard p{margin:0;font-size:14px;color:var(--paper)}
+  .matrix{display:grid;gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .mrow{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--line)}
+  .mrow:last-child{border-bottom:none}
+  .mrow .mk{padding:16px 18px;font-family:var(--font-mono);font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--iris-bright);border-right:1px solid var(--line);background:var(--ink-2)}
+  .mrow .mv{padding:16px 18px;font-size:14px;color:var(--paper-dim);line-height:1.7}
+
+  /* ---------- CONTACT ---------- */
+  .contact{text-align:center;border-top:1px solid var(--line)}
+  .contact h2{font-family:var(--font-display);font-weight:600;font-size:clamp(30px,5.5vw,58px);letter-spacing:-.02em;line-height:1.05}
+  .contact h2 .accent{color:var(--iris-bright)}
+  .contact p{color:var(--paper-dim);margin:18px auto 30px;max-width:44ch}
+  .contact-links{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+  footer{border-top:1px solid var(--line);padding:26px 0}
+  .foot-inner{display:flex;justify-content:space-between;align-items:center;font-family:var(--font-mono);font-size:12.5px;color:var(--paper-mute);flex-wrap:wrap;gap:10px}
+
+  /* ---------- reveal ---------- */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none}
+    .chip.live .dot{animation:none}
+    .app-screen{transition:none}
+  }
+  :focus-visible{outline:2px solid var(--iris-bright);outline-offset:3px;border-radius:4px}
+</style>
 </head>
-
 <body>
 
-  <!-- ======= Mobile nav toggle button ======= -->
-  <i class="bi bi-list mobile-nav-toggle d-xl-none"></i>
-
-  <!-- ======= Header ======= -->
-  <header id="header">
-    <div class="d-flex flex-column">
-
-      <div class="profile">
-        <img src="assets/img/jaafar1.jpeg" alt="" class="img-fluid rounded-circle">
-        <h1 class="text-light"><a href="index.html">Jaafar Fares</a></h1>
-        <div class="social-links mt-3 text-center">
-
-          <a href="https://github.com/jaafarfares/" class="google-plus"><i class="bx bxl-github"></i></a>
-          <a href="https://www.linkedin.com/in/jaafarfares/" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-        </div>
-      </div>
-
-      <nav id="navbar" class="nav-menu navbar">
-        <ul>
-          <li><a href="#hero" class="nav-link scrollto active"><i class="bx bx-home"></i> <span>Home</span></a></li>
-          <li><a href="#about" class="nav-link scrollto"><i class="bx bx-user"></i> <span>About</span></a></li>
-          <li><a href="#resume" class="nav-link scrollto"><i class="bx bx-file-blank"></i> <span>Resume</span></a></li>
-          <li><a href="#portfolio" class="nav-link scrollto"><i class="bx bx-book-content"></i> <span>Portfolio</span></a></li>
-          <li><a href="#services" class="nav-link scrollto"><i class="bx bx-server"></i> <span>Services</span></a></li>
-          <li><a href="#contact" class="nav-link scrollto"><i class="bx bx-envelope"></i> <span>Contact</span></a></li>
-        </ul>
-      </nav><!-- .nav-menu -->
+<nav>
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top">JF<b>_</b></a>
+    <div class="nav-links">
+      <a href="#mobile">Mobile</a>
+      <a href="#web">Web</a>
+      <a href="#about">About</a>
+      <a class="nav-cta" href="#contact">Let's talk</a>
     </div>
-  </header><!-- End Header -->
-
-  <!-- ======= Hero Section ======= -->
-  <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
-    <div class="hero-container" data-aos="fade-in">
-      <h1>Jaafar Fares</h1>
-      <p>I'm <span class="typed" data-typed-items="a full-stack Mobile Developer"></span></p>
-    </div>
-  </section><!-- End Hero -->
-
-  <main id="main">
-
-    <!-- ======= About Section ======= -->
-    <section id="about" class="about">
-      <div class="container">
-
-        <div class="section-title">
-          <h2>About</h2>
-          <p>I'm a Full-Stack Mobile Developer with 5+ years of experience specializing in secure, scalable architecture and clean code for high-growth products. My expertise spans across fintech (payment gateways, financial dashboards), e-commerce, logistics, and social impact applications. I've worked both as a freelancer and within international teams, focusing on crafting maintainable systems that scale, implementing robust security practices, and optimizing performance.</p>
-          
-          <p>From refactoring legacy code to launching new products, I bridge technical excellence with real-world impact. My approach combines architectural thinking with hands-on development to build products that scale globally while empowering both users and development teams.</p>
-        </div>
-        <div class="row">
-          <div class="col-lg-4" data-aos="fade-right">
-              <img src="assets/img/jaafar3.png" class="img-fluid" alt="">
-          </div>
-          <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
-              <h3>Full Stack Software Developer</h3>
-              <p class="fst-italic">
-                  I have developed expertise in software development, encompassing various programming languages, web development, mobile app development, and more. This diverse skill set empowers me to tackle a wide range of challenges, ensuring seamless and efficient software solutions. My journey in software development has been characterized by continuous growth and a relentless pursuit of excellence.
-              </p>
-              <div class="row">
-                  <div class="col-lg-6">
-                      <ul>
-                          <li><i class="bi bi-chevron-right"></i> <strong>Degree:</strong> <span>Software Developer</span></li>
-                          <li><i class="bi bi-chevron-right"></i> <strong>Email:</strong> <a href="mailto:jaafarferes@gmail.com"><span>jaafarferes@gmail.com</span></a></li>
-                          <li><i class="bi bi-chevron-right"></i> <strong>City:</strong> <span>Tunis, Tunisia</span></li>
-                          <li><i class="bi bi-chevron-right"></i> <strong>Education:</strong> <span>Holberton School Tunisia</span></li>
-                          <li><i class="bi bi-chevron-right"></i> <strong>Languages:</strong> <span>Arabic, English, French</span></li>
-                 
-                      </ul>
-                  </div>
-               
-             <!--      <div class="col-lg-6">
-                      <ul>
-                          <li><i class="bi bi-chevron-right"></i> <strong>Birthday:</strong> <span>30 Mar 1997</span></li>
-                          <li><i class="bi bi-chevron-right"></i> <strong>Phone:</strong> <span>+216 58 999 878</span></li>
-                          <li><i class="bi bi-chevron-right"></i> <strong>Age:</strong> <span>28</span></li>
-                      </ul>
-                  </div> -->
-              </div>
-              <!-- <h3>Experienced Flutter Developer</h3>
-              <p>
-                During my journey as a Full Stack Software Developer, I further honed my expertise by dedicating six months to an intensive internship at a startup named <a href="https://www.linkedin.com/company/tnkertn/" target="_blank">Tnker</a>, specializing in advanced Flutter principles and packages. Working with technologies such as Bloc, Provider, and local storage ..., and following the MVVM and MVC architecture, I gained in-depth knowledge of these frameworks and applied them to develop sophisticated mobile applications.
-              </p>
-              <p>
-                One of my standout achievements was conceiving, single-handedly developing, and bringing to life <a target="_blank" href="https://www.linkedin.com/pulse/exciting-announcement-introducing-staffy-your-ultimate-jaafar-fares">Staffy</a>, a powerful Flutter application designed to revolutionize work management. Staffy offers features such as effortless time tracking, seamless communication, multilingual support, personalization, geolocation integration, and an admin dashboard for comprehensive management.
-              </p>
-              <p>
-                  In building Staffy, I utilized essential packages and tools such as GetX for state management, navigation, and local storage. I integrated Google Maps API to display maps and user locations, ensuring employees are within the designated areas before sign-in/sign-out. The app follows the MVVM architecture and is ready for production, marking a significant milestone in my journey as an Experienced Flutter Developer.
-              </p>
-              <h3>Lead Mobile Developer at Barsha Technology</h3>
-              <p>
-                Currently leading mobile development efforts, I've contributed to multiple apps including Epark, Farhaty, Kharaj, and Maghasel, ensuring successful releases across platforms while working in a Scrum environment.
-              </p>
-              <p>
-                <strong>Key achievements:</strong>
-                <ul>
-                  <li>Led the complete publishing process for multiple apps on both Play Store and App Store</li>
-                  <li>Integrated complex payment gateways (Apple Pay, card payments, loyalty points) for Epark</li>
-                  <li>Refactored complete purchase flows and implemented Moyasar gateway for Farhaty</li>
-                  <li>Modernized Kharaj app with Gradle/Kotlin upgrades, view binding migration, and 65% unit test coverage</li>
-                  <li>Mentored 2 interns in Flutter development using clean architecture and Firebase</li>
-                  <li>Reduced technical debt by 30% across projects through legacy code optimization</li>
-                </ul>
-              </p>
-    
-              <h3>Co-Founder and Lead Mobile Developer at <a href="https://www.allcarta.com/" target="_blank">Allcarta</a></h3> <p> Over the past year, as a co-founder and project lead at <a href="https://www.linkedin.com/company/allcarta/posts/?feedView=all" target="_blank">Allcarta</a>, I developed three mobile applications from scratch, backed by APIs, optimized with clean architecture principles, and tailored state management. These apps were designed to meet diverse needs across various user types: </p> <p> <strong>AllCarta Club:</strong> A gamified e-commerce app for students that allows them to earn points by playing quizzes and other games, which can be redeemed for discount vouchers from various brands. The app offers a seamless user experience, combining entertainment and shopping in one platform. </p> <p> <strong>AllCarta Pro:</strong> A versatile application catering to multiple user roles, including brand owners who can manage articles, coupons, and discounts, as well as view statistics and validate purchases. It also supports club presidents and members for managing employees, events, and offers, as well as the AllCarta team for card activation and user activity tracking. </p> <p> <strong>AllCarta School:</strong> An app designed to digitize university processes, allowing students to view their schedules, tasks, grades, and payments. It also provides parents with the ability to monitor their children's academic activities and offers specific access for university presidents, teachers, and staff to manage their respective roles efficiently. </p> <p> My role as a co-founder and lead developer involved end-to-end development, optimization, and maintenance of these apps, highlighting my commitment to creating impactful digital solutions in dynamic startup environments. </p>
-          --> </div>
-      </div>
-      
-    </section><!-- End About Section -->
-
-    <!-- ======= Facts Section ======= -->
-    <section id="facts" class="facts">
-      <div class="container">
-    
-        <div class="section-title">
-          <h2>Facts</h2>
-          <p>Here are some interesting facts about me and my work:</p>
-        </div>
-    
-        <div class="row no-gutters">
-    
-          <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up">
-            <div class="count-box">
-              <i class="bi bi-emoji-smile"></i>
-              <span data-purecounter-start="0" data-purecounter-end="5" data-purecounter-duration="2" class="purecounter"></span>
-              <p><strong>Years of Experience</strong> as a Mobile Developer</p>
-            </div>
-          </div>
-    
-          <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up" data-aos-delay="100">
-            <div class="count-box">
-              <i class="bi bi-journal-richtext"></i>
-              <span data-purecounter-start="0" data-purecounter-end="27" data-purecounter-duration="2" class="purecounter"></span>
-              <p><strong>Completed Projects</strong> in Mobile Development</p>
-            </div>
-          </div>
-    
-          <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up" data-aos-delay="200">
-            <div class="count-box">
-              <i class="bi bi-headset"></i>
-              <span data-purecounter-start="0" data-purecounter-end="1895" data-purecounter-duration="3" class="purecounter"></span>
-              <p><strong>Days of Constant Learning</strong> to Stay Updated with Technology</p>
-            </div>
-          </div>
-    
-          <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up" data-aos-delay="300">
-            <div class="count-box">
-              <i class="bi bi-people"></i>
-              <span data-purecounter-start="0" data-purecounter-end="5" data-purecounter-duration="3" class="purecounter"></span>
-              <p><strong>Programming Languages</strong> I'm Proficient In</p>
-            </div>
-          </div>
-    
-        </div>
-    
-      </div>
-    </section><!-- End Facts Section -->
- <!-- Skills Section -->
-<section id="skills" class="skills section-bg">
-  <div class="container">
-
-    <div class="section-title">
-      <h2>Skills</h2>
-      <p>As a Software Developer, I have experience with a variety of technologies and tools that allow me to build robust and innovative applications. Here are some of my key skills:</p>
-    </div>
-
-    <div class="row">
-      <div class="col-lg-6" data-aos="fade-up">
-        <ul class="list-unstyled">
-          <li><i class="bi bi-dot"></i> Flutter (Dart)</li>
-          <li><i class="bi bi-dot"></i> Kotlin/Java</li>
-          <li><i class="bi bi-dot"></i> Android Jetpack</li>
-          <li><i class="bi bi-dot"></i> RESTful API Integration</li>
-          <li><i class="bi bi-dot"></i> Firebase</li>
-          <li><i class="bi bi-dot"></i> Google Maps API</li>
-          <li><i class="bi bi-dot"></i> Payment Integrations: Apple Pay, Google Pay, Moyasar, Stripe, Connect, PayPal </li>
-          <li><i class="bi bi-dot"></i> Bash Scripting</li>
-        </ul>
-      </div>
-    
-    
-      <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
-        <ul class="list-unstyled">
-          <li><i class="bi bi-dot"></i> Clean Architecture</li>
-          <li><i class="bi bi-dot"></i> MVVM</li>
-          <li><i class="bi bi-dot"></i> Git/GitHub</li>
-          <li><i class="bi bi-dot"></i> CI/CD (Fastlane)</li>
-          <li><i class="bi bi-dot"></i> Jira/Asana</li>
-          <li><i class="bi bi-dot"></i> Docker</li>
-          <li><i class="bi bi-dot"></i> Figma</li>
-          <li><i class="bi bi-dot"></i> IDEs: Android Studio, Xcode, VS Code</li>
-          <li><i class="bi bi-dot"></i> Linux Environments</li>
-        </ul>
-      </div>
-    </div>
-
   </div>
-</section>
-<!-- End Skills Section -->
-<section id="resume" class="resume">
-  <div class="container">
+</nav>
 
-    <div class="section-title">
-      <h2>Resume</h2>
-      <p>Specializing in secure, scalable architecture and clean code for high-growth products. With 5+ years of experience, I've built apps across fintech (payment gateways, financial dashboards), e-commerce, logistics, and social impact working both as a freelancer and within international teams. My focus is on crafting maintainable systems that scale, implementing robust security practices, and optimizing performance. From refactoring legacy code to launching new products, I bridge technical excellence with real world impact.</p>
-    </div>
-
-    <div class="row">
-      <!-- Left Column -->
-      <div class="col-lg-6" data-aos="fade-up">
-        
-        <!-- Summary -->
-        <h3 class="resume-title">Summary</h3>
-        <div class="resume-item pb-0">
-          <h4>Jaafar Fares - Full-Stack Mobile Developer</h4>
-          <p><a href="mailto:jaafarferes@gmail.com">jaafarferes@gmail.com</a></p>
-          <p><a href="https://github.com/jaafarfares" target="_blank">github.com/jaafarfares</a></p>
-          <p><a href="https://www.linkedin.com/in/jaafarfares" target="_blank">linkedin.com/in/jaafarfares</a></p>
-          <p>Tunis, Tunisia</p>
-          <p>WhatsApp: +216 58 999 878</p>
-          <p>EU BlueCard eligible, supported by German NGO Imagine Foundation</p>
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow reveal">Full-stack engineer · Mobile + Web · Tunis → Remote</p>
+        <div class="status-row reveal">
+          <span class="chip live"><span class="dot"></span>Available · remote &amp; freelance</span>
+          <span class="chip iris">EU Blue Card eligible</span>
         </div>
-
-        <!-- Skills -->
-        <h3 class="resume-title">Skills</h3>
-        <div class="resume-item">
-          <h4>Proficient – Mobile Development</h4>
-          <p>Flutter (Dart), Kotlin, Java, Android Jetpack, Clean Architecture, GetX, Bloc, Provider, MVVM, MVC, Unit/Widget/Integration Testing, Google Pay, Apple Pay, Moyasar, Stripe, PayPal, Git, Firebase (Auth, Firestore, Cloud Functions, Messaging, Hosting), Play Store & App Store Publishing</p>
-        </div>
-        <div class="resume-item">
-          <h4>Familiar – Web & Backend</h4>
-          <p>HTML, CSS, JavaScript (ES6+), Node.js, Flask, Docker, NGINX, SQL (PostgreSQL, MySQL), NoSQL (Firestore, MongoDB), RESTful APIs</p>
-        </div>
-
-        <!-- Education -->
-        <h3 class="resume-title">Education</h3>
-        <div class="resume-item">
-          <h4>Holberton School Tunisia</h4>
-          <h5>Full-stack Software Engineer</h5>
-          <p><em>Lac 1, Tunisia</em></p>
-          <p>Full-stack software engineering with emphasis on system design, algorithms, and scalable architectures.</p>
-        </div>
-
-        <!-- Languages -->
-        <h3 class="resume-title">Languages</h3>
-        <div class="resume-item">
-          <p>Arabic (Native)</p>
-          <p>English – Fluent (C1)</p>
-          <p>French – Conversational (B1)</p>
+        <h1 class="title reveal">I ship production apps,<br><span class="accent">end&nbsp;to&nbsp;end.</span></h1>
+        <p class="lede reveal">Flutter &amp; Kotlin on the front, the web &amp; payment backends behind them. <b>12+ apps published</b> — most of them still live.</p>
+        <div class="cta-row reveal">
+          <a class="btn btn-primary" href="#mobile">See the work →</a>
+          <a class="btn btn-ghost" href="#contact">Book a call</a>
         </div>
       </div>
-
-      <!-- Right Column -->
-      <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
-
-        <!-- Professional Experience -->
-        <h3 class="resume-title">Professional Experience</h3>
-
-        <div class="resume-item">
-          <h4>Lead Mobile Developer</h4>
-          <h5>Nov 2024 – Present</h5>
-          <p><em>Barsha Technology, Gabes, Tunisia</em></p>
-          <ul>
-            <li>Spearheaded end-to-end publishing lifecycle for multiple apps (100%) and contributed to 40% of core development.</li>
-            <li>Directed architecture design, code reviews, and feature delivery, reducing technical debt by 30%.</li>
-            <li>Implemented scalable payment solutions (Google Pay, Apple Pay, Moyasar) improving transaction success rates.</li>
-            <li>Mentored interns on Flutter and clean architecture, building a food ordering app.</li>
-            <li>Collaborated in Agile/Scrum (Jira) and resolved critical bugs, boosting app stability.</li>
-          </ul>
-        </div>
-
-        <div class="resume-item">
-          <h4>Lead Mobile Developer</h4>
-          <h5>Jun 2023 – Oct 2024</h5>
-          <p><em>Allcarta, Tunis, Tunisia</em></p>
-          <ul>
-            <li>Architected and launched Allcarta and Allcarta Pro from scratch (80% contribution).</li>
-            <li>Improved UI/UX achieving 95% user satisfaction.</li>
-            <li>Mentored junior developers and enforced clean coding practices.</li>
-            <li>Streamlined workflows with Asana, reducing delivery cycles by 30%.</li>
-          </ul>
-        </div>
-
-        <div class="resume-item">
-          <h4>Freelance Mobile Developer</h4>
-          <h5>Jul 2020 – Present</h5>
-          <p><em>Tunis, Tunisia</em></p>
-          <ul>
-            <li>Developed mobile apps end-to-end for clients and personal projects.</li>
-            <li>Implemented authentication, Firebase backends, and responsive UI/UX.</li>
-            <li>Collaborated with other developers using Git workflows.</li>
-          </ul>
-        </div>
-
-        <!-- Projects -->
-        <h3 class="resume-title">Projects</h3>
-
-        <div class="resume-item">
-          <h4>Epark – Smart Parking App</h4>
-          <ul>
-            <li>Developed and launched a parking app with real-time spot availability and interactive plans.</li>
-            <li>Integrated multiple payment gateways (Apple Pay, bank cards, fidelity points).</li>
-            <li>Used SSE client for automated gate access.</li>
-            <li>Published on Play Store & App Store with 1,000+ active users.</li>
-          </ul>
-        </div>
-
-        <div class="resume-item">
-          <h4>Nomadia – Baby Gear Rental App</h4>
-          <ul>
-            <li>Built peer-to-peer rental platform with payments, chat, and maps integration.</li>
-          </ul>
-        </div>
-
-        <div class="resume-item">
-          <h4>Events – Wedding Booking App</h4>
-          <ul>
-            <li>Implemented location-based booking features and multi-payment support.</li>
-          </ul>
-        </div>
-
-        <div class="resume-item">
-          <h4>Barsha-Food – Restaurant Discovery App</h4>
-          <ul>
-            <li>Developed GPS-based app with bookings and multi-gateway payments.</li>
-          </ul>
-        </div>
-
-        <div class="resume-item">
-          <h4>Allcarta Club – Student E-Commerce App</h4>
-          <ul>
-            <li>Created points-based discount system and gamified engagement features.</li>
-          </ul>
-        </div>
-
-        <div class="resume-item">
-          <h4>Staffy – Workforce Management App</h4>
-          <ul>
-            <li>Developed workforce tracking, real-time messaging, and multilingual support.</li>
-          </ul>
+      <div class="phone-stage reveal">
+        <div class="phone" id="phone">
+          <div class="screen" id="screen"><!-- app screens injected --></div>
         </div>
       </div>
     </div>
 
-    <p>Download my resume: 
-      <a href="assets/resumes/Jaafar_fares_EN.pdf" download>English</a> | 
-      <a href="assets/resumes/Jaafar_fares_FR.pdf" download>Français</a>
-    </p>
+    <div class="stats reveal">
+      <div class="stat"><b>20+</b><span>Apps built</span></div>
+      <div class="stat"><b>12+</b><span>Published</span></div>
+      <div class="stat"><b>1,000+</b><span>Users · Epark</span></div>
+      <div class="stat"><b>5</b><span>Payment SDKs</span></div>
+      <div class="stat"><b>5+ yrs</b><span>Experience</span></div>
+    </div>
+  </div>
+</header>
 
+<!-- ================= MOBILE ================= -->
+<section id="mobile">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">01</span>
+      <h2>Mobile</h2>
+      <span class="count mono">// Flutter · Kotlin · iOS + Android</span>
+    </div>
+    <div class="grid">
+
+      <article class="card reveal" style="--ac:#2FB6A3">
+        <div class="card-top"><span class="card-cat">Smart Parking</span><span class="live-tag">Live</span></div>
+        <h3>Epark</h3>
+        <p>Real-time spot availability and automated barrier control over an SSE stream, with live reservation and payment.</p>
+        <div class="spec">
+          <div class="spec-row"><span class="k">Stack</span><span class="v"><b>Flutter</b> · Riverpod · MVVM</span></div>
+          <div class="spec-row"><span class="k">Payments</span><span class="v">Moyasar · Apple Pay · wallet</span></div>
+          <div class="spec-row"><span class="k">Scale</span><span class="v"><b>1,000+</b> active users</span></div>
+        </div>
+        <div class="badges">
+          <a class="badge" href="#">App Store ↗</a>
+          <a class="badge" href="#">Google Play ↗</a>
+        </div>
+      </article>
+
+      <article class="card reveal" style="--ac:#F5A623">
+        <div class="card-top"><span class="card-cat">Wholesale Marketplace</span><span class="live-tag">Live</span></div>
+        <h3>Kharaj</h3>
+        <p>Three-app wholesale-farming suite (buyer, seller, delivery) with live bidding, invoicing, and in-app voice &amp; video.</p>
+        <div class="spec">
+          <div class="spec-row"><span class="k">Stack</span><span class="v"><b>Kotlin</b> · MVVM · View Binding</span></div>
+          <div class="spec-row"><span class="k">Features</span><span class="v">Bidding · Moyasar · voice/video</span></div>
+          <div class="spec-row"><span class="k">Role</span><span class="v">Lead @ Barsha</span></div>
+        </div>
+        <div class="badges">
+          <a class="badge" href="#">App Store ↗</a>
+          <a class="badge" href="#">Google Play ↗</a>
+        </div>
+      </article>
+
+      <article class="card reveal" style="--ac:#A66CFF">
+        <div class="card-top"><span class="card-cat">Wedding Booking</span><span class="live-tag">Live</span></div>
+        <h3>Events</h3>
+        <p>Location-based wedding &amp; product listings with a cart-to-reservation flow and dual payment gateways.</p>
+        <div class="spec">
+          <div class="spec-row"><span class="k">Stack</span><span class="v"><b>Kotlin</b> · MVVM</span></div>
+          <div class="spec-row"><span class="k">Payments</span><span class="v">Google Pay · Moyasar</span></div>
+          <div class="spec-row"><span class="k">Role</span><span class="v">Lead @ Barsha · 50%</span></div>
+        </div>
+        <div class="badges">
+          <a class="badge" href="#">App Store ↗</a>
+          <a class="badge" href="#">Google Play ↗</a>
+        </div>
+      </article>
+
+      <article class="card reveal" style="--ac:#3D9BFF">
+        <div class="card-top"><span class="card-cat">EdTech Platform</span><span class="live-tag">Live</span></div>
+        <h3>Allcarta School</h3>
+        <p>School-management platform for staff, teachers, students &amp; parents — schedules, attendance, payments, and progress tracking.</p>
+        <div class="spec">
+          <div class="spec-row"><span class="k">Stack</span><span class="v"><b>Flutter</b> · GetX · Clean Arch</span></div>
+          <div class="spec-row"><span class="k">Features</span><span class="v">Attendance · payments · tracking</span></div>
+          <div class="spec-row"><span class="k">Role</span><span class="v">Lead @ Allcarta</span></div>
+        </div>
+        <div class="badges">
+          <a class="badge" href="#">App Store ↗</a>
+          <a class="badge" href="#">Google Play ↗</a>
+        </div>
+      </article>
+
+      <article class="card reveal" style="--ac:#FF7A6B">
+        <div class="card-top"><span class="card-cat">P2P Rental</span><span class="live-tag">Live</span></div>
+        <h3>Nomadia</h3>
+        <p>Peer-to-peer baby-gear rental with in-app messaging and secure checkout between renters.</p>
+        <div class="spec">
+          <div class="spec-row"><span class="k">Stack</span><span class="v"><b>Flutter</b> · GetX · MVC</span></div>
+          <div class="spec-row"><span class="k">Features</span><span class="v">Chat · bookings · payments</span></div>
+          <div class="spec-row"><span class="k">Role</span><span class="v">Independent build</span></div>
+        </div>
+        <div class="badges">
+          <a class="badge" href="#">App Store ↗</a>
+          <a class="badge" href="#">Google Play ↗</a>
+        </div>
+      </article>
+
+      <article class="card reveal" style="--ac:#6C5CE7">
+        <div class="card-top"><span class="card-cat">Workforce</span><span class="live-tag">Live</span></div>
+        <h3>Staffy</h3>
+        <p>Workforce management with GPS clock-in/out, work-hour calculation, real-time messaging, and an employer dashboard.</p>
+        <div class="spec">
+          <div class="spec-row"><span class="k">Stack</span><span class="v"><b>Flutter</b> · GetX · MVVM</span></div>
+          <div class="spec-row"><span class="k">Features</span><span class="v">Realtime chat · GPS · i18n</span></div>
+          <div class="spec-row"><span class="k">Impact</span><span class="v"><b>+15%</b> user retention</span></div>
+        </div>
+        <div class="badges">
+          <a class="badge" href="#">App Store ↗</a>
+          <a class="badge" href="#">Google Play ↗</a>
+        </div>
+      </article>
+
+    </div>
   </div>
 </section>
 
-
-<!-- ======= Portfolio Section ======= -->
-<section id="portfolio" class="portfolio section-bg">
-  <div class="container">
-
-    <div class="section-title">
-      <h2>Portfolio</h2>
-      <p>Featured Applications I've Developed</p>
+<!-- ================= WEB ================= -->
+<section id="web">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">02</span>
+      <h2>Web</h2>
+      <span class="count mono">// NestJS · Next.js · Node · MongoDB · Docker</span>
     </div>
+    <div class="grid">
 
-    <div class="row portfolio-container" data-project-list="featured"></div>
+      <article class="card web reveal" style="--ac:#7B6CF6">
+        <div class="browser">
+          <div class="b-bar"><i></i><i></i><i></i><span class="b-url">luneti · eyewear store</span></div>
+          <div class="b-view"></div>
+        </div>
+        <div class="card-body">
+          <div class="card-top"><span class="card-cat">E-Commerce</span></div>
+          <h3>Luneti</h3>
+          <p>Full-stack eyewear store — catalog, guest checkout, Flouci online payment + cash-on-delivery, admin panel, and Cloudinary media.</p>
+          <div class="badges"><span class="badge">Next.js</span><span class="badge">Express</span><span class="badge">MongoDB</span><span class="badge">Flouci</span></div>
+        </div>
+      </article>
 
-    <div class="portfolio-cta-row text-center">
-      <a class="portfolio-more-btn" href="projects.html">Show All Projects</a>
+      <article class="card web reveal" style="--ac:#3DD6A0">
+        <div class="browser">
+          <div class="b-bar"><i></i><i></i><i></i><span class="b-url">ichaarat · REST API</span></div>
+          <div class="b-view"></div>
+        </div>
+        <div class="card-body">
+          <div class="card-top"><span class="card-cat">Backend / API</span></div>
+          <h3>Ichaarat API</h3>
+          <p>NestJS backend for a role-based communications app — JWT + phone-OTP auth, Swagger-documented REST, TypeORM, Dockerized.</p>
+          <div class="badges"><span class="badge">NestJS</span><span class="badge">TypeORM</span><span class="badge">Docker</span></div>
+        </div>
+      </article>
+
+      <article class="card web reveal" style="--ac:#F5A623">
+        <div class="browser">
+          <div class="b-bar"><i></i><i></i><i></i><span class="b-url">yourproject.com</span></div>
+          <div class="b-view"></div>
+        </div>
+        <div class="card-body">
+          <div class="card-top"><span class="card-cat">Placeholder</span></div>
+          <h3>[ More web builds ]</h3>
+          <p>Additional Node / React builds and dashboards can live here — swap in a screenshot and live link.</p>
+          <div class="badges"><span class="badge ph">React</span><span class="badge ph">REST API</span><span class="badge ph">SQL</span></div>
+        </div>
+      </article>
+
     </div>
-
   </div>
-</section><!-- End Portfolio Section -->
+</section>
 
-<!-- ======= Portfolio Section ======= -->
-<!-- <section id="portfolio" class="portfolio section-bg">
-  <div class="container">
-
-    <div class="section-title">
-      <h2>Portfolio</h2>
-      <p>Here are some of the projects I have worked on:</p>
+<!-- ================= ABOUT ================= -->
+<section id="about">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">03</span>
+      <h2>About</h2>
+      <span class="count mono">// the engineer</span>
     </div>
-
-    <div class="row" data-aos="fade-up">
-      <div class="col-lg-12 d-flex justify-content-center">
-        <ul id="portfolio-flters">
-          <li data-filter="*" class="filter-active">All</li>
-          <li data-filter=".filter-app">Mobile</li>
-          <li data-filter=".filter-web">Web</li>
-        </ul>
+    <div class="about-grid">
+      <div class="reveal">
+        <p>I'm a full-stack engineer who takes products from the first commit to a stable release in the App Store and Google Play — and keeps them running after launch.</p>
+        <p>My depth is in <b>mobile</b> (Flutter, Kotlin, clean architecture) and the <b>payments and backends</b> behind it — I've shipped fintech, e-commerce, logistics, and marketplace apps, integrating gateways like Apple Pay, Google Pay, Moyasar, Stripe and PayPal.</p>
+        <p>I've led mobile at two companies and freelanced for international teams, working in English, French and Arabic.</p>
+        <div class="bluecard">
+          <span class="ic">◆</span>
+          <p><b>EU Blue Card eligible</b>, supported by the German Imagine Foundation — cleared to work with EU teams, and set up to invoice international clients as an independent contractor.</p>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="matrix">
+          <div class="mrow"><div class="mk">Mobile</div><div class="mv">Flutter (Dart), Kotlin, Java, Android Jetpack · Bloc / GetX / Provider · MVVM · unit &amp; integration testing</div></div>
+          <div class="mrow"><div class="mk">Payments</div><div class="mv">Apple Pay, Google Pay, Moyasar, Stripe, PayPal · secure checkout &amp; loyalty systems</div></div>
+          <div class="mrow"><div class="mk">Web &amp; API</div><div class="mv">Node.js / Express, NestJS, Next.js / React, JavaScript (ES6+), REST APIs · MongoDB, PostgreSQL, MySQL, Firestore</div></div>
+          <div class="mrow"><div class="mk">Ship / Ops</div><div class="mv">CI/CD (Fastlane), Docker, NGINX, Git · App Store &amp; Play Store publishing · Linux</div></div>
+        </div>
       </div>
     </div>
-
-    <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="100">
-      <div class="col-lg-4 col-md-6 portfolio-item filter-app mb-4">
-        <div class="portfolio-wrap">
-
-          <a href="https://www.example.com/staffy-blog-post" target="_blank" rel="noopener noreferrer" style="text-align: center; display: block;">
-            <p style="font-size: 24px;">Staffy</p>
-          </a>
-    
-          <a href="assets/projects/Staffy/fazt Gif Staffy.gif" target="_blank" rel="noopener noreferrer">
-            <img src="assets/projects/Staffy/fazt Gif Staffy.gif" class="img-fluid" alt="Staffy Gif">
-          </a>
-    
-          <div class="portfolio-links">
-            <a href="assets/img/portfolio/default.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 1"><i class="bx bx-plus"></i></a>
-          </div>
-        </div>
-      </div>
-    
-      
-      <div class="col-lg-4 col-md-6 portfolio-item filter-app mb-4">
-        <div class="portfolio-wrap">
-          <a href="https://www.linkedin.com/feed/update/urn:li:activity:7108053022387097603/" target="_blank" rel="noopener noreferrer" style="text-align: center; display: block;">
-            <p style="font-size: 24px;">Tnker</p>
-          </a>
-          
-          <img src="assets/projects/tnker/tnker1.gif" class="img-fluid" alt="Tnker Gif">
-
-          <div class="portfolio-links">
-            <a href="assets/img/portfolio/default.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 1"><i class="bx bx-plus"></i></a>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4 col-md-6 portfolio-item filter-app mb-4">
-        <div class="portfolio-wrap">
-          <a href="https://www.linkedin.com/feed/update/urn:li:activity:7108053022387097603/" target="_blank" rel="noopener noreferrer" style="text-align: center; display: block;">
-            <p style="font-size: 24px;">Allcarta</p>
-          </a>
-          
-          <img src="assets/projects/allcarta/allcarta1.gif" class="img-fluid" alt="Tnker Gif">
-
-          <div class="portfolio-links">
-            <a href="assets/img/portfolio/default.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 1"><i class="bx bx-plus"></i></a>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-4 col-md-6 portfolio-item filter-web">
-        <div class="portfolio-wrap">
-          <img src="assets/projects/web1.png" class="img-fluid" alt="Web 1">
-          <div class="portfolio-links">
-            <a href="assets/img/portfolio/default.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 1"><i class="bx bx-plus"></i></a>
-            <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
-          </div>
-        </div>
-      </div>
-
-
-    </div>
-
   </div>
-</section> -->
+</section>
 
-<!-- End Portfolio Section -->
-
-<!-- ======= Services Section ======= -->
-<section id="services" class="services">
-  <div class="container">
-
-    <div class="section-title">
-      <h2>How I Can Help You</h2>
-      <p>I transform your ideas into secure, high-performance mobile apps ready for the App Store and Play Store:</p>
+<!-- ================= CONTACT ================= -->
+<section class="contact" id="contact">
+  <div class="wrap">
+    <p class="eyebrow reveal" style="text-align:center;margin-bottom:16px">Open to remote roles &amp; freelance</p>
+    <h2 class="reveal">Got something to <span class="accent">ship?</span></h2>
+    <p class="reveal">Tell me what you're building. I reply fast, and I can start with a short call to see if it's a fit.</p>
+    <div class="contact-links reveal">
+      <a class="btn btn-primary" href="mailto:jaafarferes@gmail.com">Email me →</a>
+      <a class="btn btn-ghost" href="https://www.linkedin.com/in/jaafarfares/" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn btn-ghost" href="https://github.com/jaafarfares/" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn btn-ghost" href="https://wa.me/21658999878" target="_blank" rel="noopener">WhatsApp</a>
     </div>
-
-    <div class="row">
-      <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up">
-        <div class="icon"><i class="bi bi-phone"></i></div>
-        <h4 class="title"><a href="">Complete App Development</a></h4>
-        <p class="description">From concept to launch, I handle everything:
-          <ul>
-            <li>Turn your sketches into beautiful, functional apps</li>
-            <li>Build for both iOS and Android simultaneously</li>
-            <li>Ensure smooth performance on all devices</li>
-            <li>Handle all App Store/Play Store submissions</li>
-            <li>Provide ongoing updates and maintenance</li>
-          </ul>
-        </p>
-      </div>
-      
-      <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="100">
-        <div class="icon"><i class="bi bi-cash-coin"></i></div>
-        <h4 class="title"><a href="">FinTech Solutions</a></h4>
-        <p class="description">Secure financial apps that users trust:
-          <ul>
-            <li>Payment gateways (credit cards, Apple/Google Pay)</li>
-            <li>Banking and money transfer interfaces</li>
-            <li>Financial dashboards with real-time data</li>
-            <li>Fraud prevention and security features</li>
-            <li>Compliance with financial regulations</li>
-          </ul>
-        </p>
-      </div>
-
-      <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="200">
-        <div class="icon"><i class="bi bi-cart"></i></div>
-        <h4 class="title"><a href="">E-Commerce Apps</a></h4>
-        <p class="description">Boost your online sales with:
-          <ul>
-            <li>Product catalogs with smooth browsing</li>
-            <li>Secure checkout with multiple payment options</li>
-            <li>User accounts and order tracking</li>
-            <li>Push notifications for promotions</li>
-            <li>Loyalty programs and coupons</li>
-          </ul>
-        </p>
-      </div>
-
-      <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="300">
-        <div class="icon"><i class="bi bi-truck"></i></div>
-        <h4 class="title"><a href="">Logistics & Delivery</a></h4>
-        <p class="description">Streamline your operations:
-          <ul>
-            <li>Real-time GPS tracking</li>
-            <li>Driver/customer communication</li>
-            <li>Route optimization</li>
-            <li>Proof of delivery systems</li>
-            <li>Inventory management</li>
-          </ul>
-        </p>
-      </div>
-
-      <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="400">
-        <div class="icon"><i class="bi bi-shield-lock"></i></div>
-        <h4 class="title"><a href="">Security & Privacy</a></h4>
-        <p class="description">Protect your business and users:
-          <ul>
-            <li>Data encryption at all levels</li>
-            <li>Secure authentication (biometrics, 2FA)</li>
-            <li>Regular security updates</li>
-            <li>GDPR and privacy compliance</li>
-            <li>Penetration testing</li>
-          </ul>
-        </p>
-      </div>
-
-      <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="500">
-        <div class="icon"><i class="bi bi-graph-up"></i></div>
-        <h4 class="title"><a href="">App Growth</a></h4>
-        <p class="description">Keep improving after launch:
-          <ul>
-            <li>User feedback analysis</li>
-            <li>Performance optimization</li>
-            <li>New feature development</li>
-            <li>Marketing API integrations</li>
-            <li>Conversion rate improvements</li>
-          </ul>
-        </p>
-      </div>
-    </div>
-
   </div>
-</section><!-- End Services Section -->
+</section>
 
-    <section id="contact" class="contact">
-      <div class="container">
+<footer>
+  <div class="wrap foot-inner">
+    <span>© <span id="yr"></span> Jaafar Fares</span>
+    <span>Built &amp; shipped from Tunis 🇹🇳 · working worldwide</span>
+  </div>
+</footer>
 
-        <div class="section-title">
-          <h2>Contact</h2>
-          <p>Thank you for taking the time to explore my portfolio. If you have any questions, need further information, or want to discuss potential collaboration opportunities, please don't hesitate to reach out. I'm excited to connect with you!</p>
-          <p>You can contact me through the form below or directly via email or phone. I'll make sure to respond as soon as possible.</p>
-        </div>
+<script>
+  // ---- app screens for the hero phone (real apps) ----
+  var apps = [
+    {name:"Epark", tag:"Smart parking", ac:"#2FB6A3"},
+    {name:"Kharaj", tag:"Wholesale suite", ac:"#F5A623"},
+    {name:"Nomadia", tag:"Gear rental", ac:"#FF7A6B"},
+    {name:"Events", tag:"Wedding booking", ac:"#A66CFF"}
+  ];
+  var screen = document.getElementById('screen');
+  apps.forEach(function(a,i){
+    var s = document.createElement('div');
+    s.className = 'app-screen' + (i===0?' on':'');
+    s.style.setProperty('--ac', a.ac);
+    s.innerHTML =
+      '<div class="sbar"><span>9:41</span><span>5G ▪ ▪ ▪</span></div>'+
+      '<div class="app-body">'+
+        '<div class="app-name">'+a.name+'</div>'+
+        '<div class="app-tag">'+a.tag+'</div>'+
+        '<div class="app-hero-card" style="background:linear-gradient(150deg,'+a.ac+',#0d1120)"></div>'+
+        '<div class="app-row"><div class="app-pill accent"></div><div class="app-pill"></div></div>'+
+        '<div class="app-line"></div><div class="app-line s"></div>'+
+        '<div class="app-nav"><i class="act"></i><i></i><i></i><i></i></div>'+
+      '</div>';
+    screen.appendChild(s);
+  });
 
-        <div class="row" data-aos="fade-in">
+  var reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
 
-          <div class="col-lg-5 d-flex align-items-stretch">
-            <div class="info">
-              <div class="address">
-                <i class="bi bi-geo-alt"></i>
-                <h4>Location</h4>
-                <p>Ariana, Tunisia, North Africa</p>
-              </div>
+  // cycle screens
+  if(!reduce){
+    var idx = 0, slides = screen.querySelectorAll('.app-screen');
+    setInterval(function(){
+      slides[idx].classList.remove('on');
+      idx = (idx+1) % slides.length;
+      slides[idx].classList.add('on');
+    }, 2600);
+  }
 
-              <div class="email">
-                <i class="bi bi-envelope"></i>
-                <h4>Email</h4>
-                <p><a href="mailto:jaafarferes@gmail.com" target="_blank">jaafarferes@gmail.com</a></p>
-                
+  // pointer tilt on phone
+  var phone = document.getElementById('phone');
+  if(!reduce && window.matchMedia('(hover:hover)').matches){
+    document.querySelector('.phone-stage').addEventListener('mousemove', function(e){
+      var r = this.getBoundingClientRect();
+      var x = (e.clientX - r.left)/r.width - .5;
+      var y = (e.clientY - r.top)/r.height - .5;
+      phone.style.transform = 'rotateY('+(x*10)+'deg) rotateX('+(-y*10)+'deg)';
+    });
+    document.querySelector('.phone-stage').addEventListener('mouseleave', function(){
+      phone.style.transform = 'rotateY(0) rotateX(0)';
+    });
+  }
 
+  // scroll reveal
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, {threshold:.14});
+  document.querySelectorAll('.reveal').forEach(function(el,i){
+    el.style.transitionDelay = (Math.min(i,6)*40)+'ms';
+    io.observe(el);
+  });
 
-
-              </div>
-
-            <!--   <div class="phone">
-                <i class="bi bi-phone"></i>
-                <h4>Call</h4>
-                <p><a href="+216 58 999 878" target="_blank">+216 58 999 878</a></p>
-
-              </div>
- -->
-              <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d102217.08678627666!2d10.183958707734245!3d36.81171484356064!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2stn!4v1727083965072!5m2!1sen!2stn" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>            </div>
-
-          </div>
-          <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch">
-            <form id="contact-form" role="form" class="php-email-form">
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label for="name">Your Name</label>
-                        <input type="text" name="name" class="form-control" id="name" required>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="email">Your Email</label>
-                        <input type="email" class="form-control" name="email" id="email" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="subject">Subject</label>
-                    <input type="text" class="form-control" name="subject" id="subject" required>
-                </div>
-                <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea class="form-control" id="message" name="message" rows="10" required></textarea>
-                </div>
-                <div class="my-3">
-                    <div class="loading">Loading</div>
-                    <div class="error-message"></div>
-                    <div class="sent-message">Your message has been sent. Thank you!</div>
-                </div>
-                <div class="text-center">
-                    <button type="submit" onclick="sendEmail(event)">Send Message</button>
-                </div>
-            </form>
-        </div>
-        
-        
-
-        </div>
-
-      </div>
-    </section><!-- End Contact Section -->
-
-  </main><!-- End #main -->
-
-
-
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-  <!-- Vendor JS Files -->
-  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
-  <script src="assets/vendor/aos/aos.js"></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="assets/vendor/typed.js/typed.umd.js"></script>
-  <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
-  <script src="assets/js/projects-data.js"></script>
-  <script src="assets/js/projects-renderer.js"></script>
-  <script src="assets/js/projects-home.js"></script>
-
-  <!-- Template Main JS File -->
-  <script src="assets/js/main.js"></script>
-
+  document.getElementById('yr').textContent = new Date().getFullYear();
+</script>
 </body>
-
 </html>
