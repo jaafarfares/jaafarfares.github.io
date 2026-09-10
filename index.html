@@ -47,7 +47,9 @@
 }
 
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--bg)}
+/* clip on BOTH — overflow set only on body propagates to the viewport and
+   leaves body itself visible, which lets the decorative glows pan sideways */
+html,body{margin:0;padding:0;background:var(--bg);overflow-x:clip}
 html{scroll-behavior:smooth}
 body{font-family:var(--sans);color:var(--text);min-height:100vh;overflow-x:clip;position:relative;-webkit-font-smoothing:antialiased}
 ::selection{background:var(--ac);color:var(--bg)}
@@ -109,6 +111,9 @@ button{font:inherit}
 .logo-xs{width:20px;height:20px;border-radius:6px;flex-shrink:0}
 .logo-xs>img{object-fit:contain;background:#12161C;padding:2px}
 .logo-xs .fb{background:#12161C;border:1px solid var(--line-3);border-radius:6px;font-size:8px;font-weight:700;color:var(--dim);font-family:var(--mono)}
+/* dark artwork on a transparent background would vanish on the dark tile —
+   `light: true` in ASSETS swaps in a paper-white backing instead */
+.slot.on-light>img{background:#F2F4F7}
 
 /* ============================================================
    CURSOR GLOW
@@ -469,6 +474,7 @@ button{font:inherit}
 .pcard-head h3{font-size:26px;font-weight:700;letter-spacing:-.02em;margin:0}
 .pcard-body p{font-size:15px;line-height:1.6;color:var(--muted);margin:0}
 .pcard-org{font-family:var(--mono);font-size:12px;color:var(--dim);margin-top:14px}
+.pcard-body .stores{margin:16px 0 0}
 .mini{width:130px;height:270px;border-radius:26px;background:var(--surface);border:1px solid var(--line-3);
   padding:6px;flex-shrink:0}
 .mini-screen{position:relative;width:100%;height:100%;border-radius:21px;padding:24px 8px 8px;overflow:hidden}
@@ -497,15 +503,15 @@ button{font:inherit}
 .also-item{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--muted);border:1px solid var(--line-3);
   border-radius:999px;padding:6px 14px 6px 7px;transition:color .3s,border-color .3s}
 .also-item:hover{color:var(--text);border-color:var(--dim)}
+.also-item:has(.store-mini){padding-right:7px}
 
 /* ============================================================
    WEB WORK
    ============================================================ */
-.web-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:24px}
+.web-grid{display:grid;grid-template-columns:1fr;gap:24px}
 .wcard{background:var(--panel-2);border:1px solid var(--line);border-radius:28px;overflow:hidden;
   display:flex;flex-direction:column;transition:border-color .3s,transform .3s}
 .wcard-ac:hover{border-color:color-mix(in srgb,var(--ac) 40%,transparent);transform:translateY(-6px)}
-.wcard-blue:hover{border-color:#7EC8FF66;transform:translateY(-6px)}
 .chrome{display:flex;align-items:center;gap:8px;padding:14px 18px;border-bottom:1px solid var(--line);
   background:var(--ticker)}
 .chrome i{width:11px;height:11px;border-radius:50%;display:block}
@@ -513,40 +519,59 @@ button{font:inherit}
 .chrome .url{font-family:var(--mono);font-size:12px;color:var(--dim);margin-left:14px;background:var(--panel-3);
   border:1px solid var(--line-3);border-radius:8px;padding:5px 14px;flex:1;text-align:center;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.chrome .plain{font-family:var(--mono);font-size:12px;color:var(--dim);margin-left:14px}
-.wshot{position:relative;background:linear-gradient(170deg,var(--panel-3),var(--panel-2))}
-.wshot .shot{z-index:4}
-.luneti-mock{padding:26px 26px 0}
-.luneti-bar{display:flex;gap:14px;align-items:center;margin-bottom:18px}
-.luneti-bar .logo-txt{font-family:var(--serif);font-style:italic;font-size:20px}
-.luneti-bar .nav{font-size:11px;color:var(--dim);margin-left:auto;font-family:var(--mono);
-  position:static;padding:0;background:none;border:none;backdrop-filter:none}
-.luneti-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.luneti-item{border:1px solid var(--line-3);border-radius:14px;padding:14px;background:var(--panel-3)}
-.luneti-item .art{height:52px;display:grid;place-items:center}
-.frame{width:64px;height:22px;border:2.5px solid var(--ac);border-radius:11px 11px 14px 14px;position:relative}
+/* screenshot stage — holds the real capture, or the drawn storefront behind it */
+.wshot{position:relative;background:linear-gradient(170deg,var(--panel-3),var(--panel-2));
+  aspect-ratio:1440/880;overflow:hidden}
+.wshot .shot{z-index:4;background:var(--panel-2)}
+.wshot .shot img{object-position:top}
+.luneti-mock{position:absolute;inset:0;padding:34px 34px 0}
+.luneti-bar{display:flex;gap:14px;align-items:center;margin-bottom:26px}
+.luneti-bar .logo-txt{font-family:var(--serif);font-style:italic;font-size:24px}
+.luneti-bar .shopnav{font-size:11px;color:var(--dim);margin-left:auto;font-family:var(--mono);letter-spacing:.06em}
+.luneti-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.luneti-item{border:1px solid var(--line-3);border-radius:14px;padding:20px;background:var(--panel-3)}
+.luneti-item .art{height:74px;display:grid;place-items:center}
+.frame{width:78px;height:27px;border:2.5px solid var(--ac);border-radius:13px 13px 17px 17px;position:relative}
 .frame i{position:absolute;inset:3px;display:flex;gap:3px}
 .frame i b{flex:1;background:#C6F24E22;border-radius:6px}
-.frame-round{height:20px;border-color:var(--blue);border-radius:99px}
+.frame-round{height:25px;border-color:var(--blue);border-radius:99px}
 .frame-round i b{background:#7EC8FF22;border-radius:99px}
 .frame-square{border-color:var(--pink);border-radius:4px}
 .frame-square i b{background:#F28BB422;border-radius:2px}
-.luneti-item .cap{font-size:11px;font-family:var(--mono);color:var(--muted);margin-top:8px}
+.frame-cat{border-color:var(--gold);border-radius:14px 14px 6px 6px}
+.frame-cat i b{background:#EFB63F22;border-radius:8px 8px 3px 3px}
+.luneti-item .cap{font-size:11px;font-family:var(--mono);color:var(--muted);margin-top:10px}
 .luneti-item .cap b{color:var(--text);font-weight:400}
 .wbody{padding:26px}
-.wbody h3{font-size:28px;font-weight:700;letter-spacing:-.02em;margin:0 0 10px}
+.wbody h3{font-size:28px;font-weight:700;letter-spacing:-.02em;margin:0}
 .wbody p{font-size:15px;line-height:1.6;color:var(--muted);margin:0}
 .wbody .org{font-family:var(--mono);font-size:12px;color:var(--dim);margin-top:14px}
-.wbody-top{border-top:1px solid var(--line)}
-.wcard-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
-.api{padding:22px 26px;font-family:var(--mono);font-size:12.5px;line-height:2.1;
-  background:linear-gradient(170deg,var(--ticker),var(--panel-2));flex:1}
-.api .m{border-radius:5px;padding:2px 8px}
-.api .post{color:#28C840;background:#28C84018}
-.api .get{color:var(--blue);background:#7EC8FF18}
-.api .patch{color:var(--gold);background:#EFB63F18}
-.api .path{color:var(--muted)}
-.api .cmt{color:var(--dim)}
+.wbody-wide{display:grid;grid-template-columns:1fr 1fr;gap:40px;padding:34px 34px 38px;align-items:start}
+.wcard-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.visit{font-family:var(--mono);font-size:12px;color:var(--ac);text-decoration:none;
+  border-bottom:1px solid color-mix(in srgb,var(--ac) 35%,transparent);padding-bottom:2px;
+  transition:border-color .25s}
+.visit:hover{border-bottom-color:var(--ac)}
+
+/* ============================================================
+   STORE BADGES — App Store / Google Play, hidden when unlinked
+   ============================================================ */
+.stores{display:flex;gap:9px;flex-wrap:wrap;margin:0 0 22px}
+.stores:empty{display:none}
+.store{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line-3);border-radius:999px;
+  padding:8px 15px;white-space:nowrap;
+  transition:color .25s,border-color .25s,transform .25s,box-shadow .25s}
+.store:hover{color:var(--text);border-color:var(--sa,var(--ac));transform:translateY(-2px);
+  box-shadow:0 10px 26px -14px var(--sa,var(--ac))}
+.store svg{width:13px;height:13px;fill:currentColor;flex-shrink:0}
+.store:hover svg{fill:var(--sa,var(--ac))}
+/* icon-only variant for the "also shipped" pills */
+.store-mini{display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;
+  border-radius:50%;border:1px solid var(--line-3);color:var(--dim);flex-shrink:0;
+  transition:color .25s,border-color .25s,background .25s}
+.store-mini svg{width:11px;height:11px;fill:currentColor}
+.store-mini:hover{color:var(--ac);border-color:var(--ac);background:color-mix(in srgb,var(--ac) 10%,transparent)}
 
 /* ============================================================
    STACK
@@ -594,8 +619,8 @@ button{font:inherit}
   .hero-art{--ry:0deg}
   .hero-phone{width:min(300px,70vw)}
   .sec,.foot{padding-left:40px;padding-right:40px}
-  .web-grid{grid-template-columns:1fr}
   .stack-grid{grid-template-columns:1fr 1fr}
+  .wbody-wide{gap:28px;padding:28px}
 }
 @media (max-width:900px){
   .nav{padding:14px 20px}
@@ -619,6 +644,11 @@ button{font:inherit}
   .case-l>div:last-child,.case-r>div:first-child{grid-row:2}
   .pair{grid-template-columns:1fr;padding:60px 0 0}
   .stack-grid{grid-template-columns:1fr}
+  .wbody-wide{grid-template-columns:1fr;gap:22px;padding:26px}
+  .luneti-mock{padding:22px 22px 0}
+  .luneti-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+  .luneti-item{padding:14px}
+  .luneti-bar{margin-bottom:18px}
   .sec{padding:70px 40px 30px}
   .foot{padding:80px 40px 40px}
   .foot-base{margin-top:60px}
@@ -650,6 +680,11 @@ button{font:inherit}
   .testimonial .q{font-size:21px}
   .ship{grid-template-columns:1fr;justify-items:center}
   .foot-base{justify-content:center;text-align:center}
+  .luneti-bar .shopnav{display:none}
+  .store{font-size:10px;padding:7px 12px}
+  /* the big ambient glows are sized for desktop — shrink so they stay on-screen */
+  .hero-orb{width:300px;height:300px;margin:-150px 0 0 -150px}
+  .note-orb{width:220px;height:220px;margin:-110px 0 0 -110px}
   #glow{display:none}
 }
 </style>
@@ -971,6 +1006,7 @@ button{font:inherit}
       <p class="case-p">Smart-parking platform: find a spot, book it, pay with Apple Pay or wallet, and the gate
         opens in realtime over server-sent events. Shipped with EN/AR localization and a full CI/CD pipeline —
         plus a companion QR gate-attendant app.</p>
+      <div class="stores" data-stores="epark" style="--sa:var(--blue)"></div>
       <div class="case-meta">
         <span>ROLE — <b>Lead mobile developer</b></span>
         <span>TEAM — <b>Barsha Technology</b></span>
@@ -1059,6 +1095,7 @@ button{font:inherit}
       <p class="case-p">A live-bidding produce exchange split across four native Android apps — buyer, marketer,
         supervisor and transporter. Online auctions, Moyasar payments, invoicing, and voice-note negotiation baked
         into chat. I wrote ~40% of the code and half the unit tests, and led the View Binding + Gradle migration.</p>
+      <div class="stores" data-stores="kharaj" style="--sa:var(--gold)"></div>
       <div class="case-meta">
         <span>ROLE — <b>Lead mobile developer</b></span>
         <span>TEAM — <b>Barsha Technology</b></span>
@@ -1092,6 +1129,7 @@ button{font:inherit}
       </div>
       <p class="case-p">Wedding-booking app for Saudi Arabia: GPS-based venue discovery, cart-to-reservation flow,
         and Google Pay + Moyasar checkout. I built half the codebase and carried it to its Play Store release.</p>
+      <div class="stores" data-stores="events" style="--sa:var(--pink)"></div>
       <div class="case-meta">
         <span>ROLE — <b>Lead mobile developer</b></span>
         <span>TEAM — <b>Barsha Technology</b></span>
@@ -1138,6 +1176,7 @@ button{font:inherit}
           <h3>Sahha Market</h3>
         </div>
         <p>Health-grocery e-commerce in pure Jetpack Compose — cart, checkout, order tracking, maps and push.</p>
+        <div class="stores" data-stores="sahha" style="--sa:var(--green)"></div>
         <div class="pcard-org">@ Barsha Technology</div>
       </div>
       <div class="mini">
@@ -1165,6 +1204,7 @@ button{font:inherit}
           <h3>Nomadia</h3>
         </div>
         <p>Peer-to-peer baby-gear rental: secure bookings, in-app messaging between renters, phone-OTP auth.</p>
+        <div class="stores" data-stores="nomadia" style="--sa:var(--purple)"></div>
         <div class="pcard-org">Independent project</div>
       </div>
       <div class="mini">
@@ -1191,7 +1231,7 @@ button{font:inherit}
   <div class="sec-head" data-reveal>
     <span class="sec-no">02</span>
     <h2>Web <span class="ital">work</span></h2>
-    <span class="sec-note">NEXT.JS / NESTJS / NODE</span>
+    <span class="sec-note">NEXT.JS / EXPRESS / DOCKER</span>
   </div>
 
   <div class="web-grid">
@@ -1202,78 +1242,56 @@ button{font:inherit}
         <span class="url">luneti.tn — eyewear e-commerce</span>
       </div>
       <div class="wshot">
+        <!-- fallback storefront, shown until webshots.luneti loads -->
         <div class="luneti-mock">
           <div class="luneti-bar">
             <span class="logo-txt">luneti</span>
-            <span class="nav">SHOP · MOMENTS · CART(2)</span>
+            <span class="shopnav">SOLAIRE · OPTIQUE · CLIP-ON · NOUVEAUTÉS</span>
           </div>
           <div class="luneti-grid">
             <div class="luneti-item">
               <div class="art"><div class="frame"><i><b></b><b></b></i></div></div>
-              <div class="cap">Aviator Noir<br><b>129 TND</b></div>
+              <div class="cap">Emmy<br><b>101 Dt</b></div>
             </div>
             <div class="luneti-item">
               <div class="art"><div class="frame frame-round"><i><b></b><b></b></i></div></div>
-              <div class="cap">Round Azur<br><b>99 TND</b></div>
+              <div class="cap">Emery<br><b>102 Dt</b></div>
             </div>
             <div class="luneti-item">
               <div class="art"><div class="frame frame-square"><i><b></b><b></b></i></div></div>
-              <div class="cap">Retro Rose<br><b>149 TND</b></div>
+              <div class="cap">Antony<br><b>98 Dt</b></div>
+            </div>
+            <div class="luneti-item">
+              <div class="art"><div class="frame frame-cat"><i><b></b><b></b></i></div></div>
+              <div class="cap">Silvia<br><b>102 Dt</b></div>
             </div>
           </div>
         </div>
         <div class="shot" data-webshot="luneti"></div>
       </div>
-      <div class="wbody">
-        <div class="tags">
-          <span class="tag tag-ac">NEXT.JS 14 · REACT 18</span>
-          <span class="tag">EXPRESS · MONGODB</span>
-          <span class="tag">FLOUCI PAY · DOCKER</span>
-        </div>
-        <div class="wcard-head">
-          <div class="logo-sm slot" data-slot="logoLuneti">
-            <div class="fb" style="color:var(--ac)">Lu</div>
-            <img alt="Luneti logo">
+      <div class="wbody wbody-wide">
+        <div>
+          <div class="tags">
+            <span class="tag tag-ac">NEXT.JS 14 · REACT 18</span>
+            <span class="tag">EXPRESS · MONGODB</span>
+            <span class="tag">FLOUCI PAY · DOCKER</span>
           </div>
-          <h3>Luneti</h3>
-        </div>
-        <p>Full-stack eyewear store built solo: Next.js storefront, Express + MongoDB API, guest checkout,
-          COD + Flouci payments, Cloudinary media, admin panel — deployed on a VPS with Docker &amp; nginx.</p>
-        <div class="org">Independent project · design → deploy</div>
-      </div>
-    </div>
-
-    <!-- Ichaarat API -->
-    <div class="wcard wcard-blue" data-reveal>
-      <div class="chrome">
-        <i class="r"></i><i class="y"></i><i class="g"></i>
-        <span class="plain">api.ichaarat — swagger</span>
-      </div>
-      <div class="wshot" style="display:flex;flex-direction:column;flex:1">
-        <div class="api">
-          <div><span class="m post">POST</span> <span class="path">/auth/otp/verify</span></div>
-          <div><span class="m get">GET</span> <span class="path">/notices?role=inspector</span></div>
-          <div><span class="m patch">PATCH</span> <span class="path">/notices/:id/status</span></div>
-          <div><span class="m post">POST</span> <span class="path">/users/:id/roles</span></div>
-          <div class="cmt">// JWT · TypeORM · cache · Jest</div>
-        </div>
-        <div class="shot" data-webshot="ichaarat"></div>
-      </div>
-      <div class="wbody wbody-top">
-        <div class="tags">
-          <span class="tag tag-blue">NESTJS 11 · TYPEORM</span>
-          <span class="tag">DOCKER · SWAGGER</span>
-        </div>
-        <div class="wcard-head">
-          <div class="logo-sm slot" data-slot="logoIchaarat">
-            <div class="fb" style="color:var(--blue)">Ic</div>
-            <img alt="Ichaarat logo">
+          <div class="wcard-head">
+            <div class="logo-sm slot" data-slot="logoLuneti">
+              <div class="fb" style="color:var(--ac)">Lu</div>
+              <img alt="Luneti logo">
+            </div>
+            <h3>Luneti</h3>
           </div>
-          <h3>Ichaarat API</h3>
+          <a class="visit" href="https://www.luneti.tn/" target="_blank" rel="noopener">luneti.tn ↗</a>
         </div>
-        <p>Role-based backend for a public-notices platform: phone-OTP auth, JWT sessions, role routing,
-          Swagger docs and a Dockerised deploy — powering the Flutter client I also built.</p>
-        <div class="org">@ Barsha Technology · mobile + backend</div>
+        <div>
+          <p>Full-stack eyewear store built solo: Next.js storefront, Express + MongoDB API, guest checkout,
+            COD + Flouci payments, Cloudinary media, admin panel — deployed on a VPS with Docker &amp; nginx.
+            Live in Tunisia with optique, solaire and clip-on catalogues, a frame-shape finder and a
+            face-shape guide.</p>
+          <div class="org">Independent project · design → deploy</div>
+        </div>
       </div>
     </div>
   </div>
@@ -1343,7 +1361,12 @@ button{font:inherit}
    • `shots` are phone screenshots (portrait, ideally 1170x2532 or any
      ~9:19.5 ratio). Add 1 or 2 per app; the "shot" buttons under each
      phone appear on their own, and autoplay starts cycling.
-   • `webshots` are browser screenshots (landscape, ~16:10).
+   • `webshots` are browser screenshots (landscape, 1440x880 looks best).
+   • `stores` are App Store / Google Play links. An empty string or null
+     hides that badge entirely — no dead buttons, no placeholders.
+   • A logo that is dark artwork on a transparent background needs a light
+     tile behind it: write it as { src: '…', light: true } instead of a
+     plain string. Works for any slot.
    ================================================================== */
 const ASSETS = {
   portrait: 'assets/img/jaafar-portrait.jpeg',
@@ -1354,13 +1377,23 @@ const ASSETS = {
   },
 
   logos: {
-    epark:    'assets/projects/epark_icon.png',
-    kharaj:   'assets/projects/Kharaaj.png',
-    events:   'assets/projects/events_icon.png',
-    sahha:    null,                              // drop a file in assets/projects/
-    nomadia:  'assets/projects/nomadia_icon.jpeg',
-    luneti:   null,
-    ichaarat: null
+    epark:   'assets/projects/epark_icon.png',
+    kharaj:  'assets/projects/Kharaaj.png',
+    events:  'assets/projects/events_icon.png',
+    sahha:   null,                               // drop a file in assets/projects/
+    nomadia: 'assets/projects/nomadia_icon.jpeg',
+    luneti:  { src: 'assets/projects/luneti_icon.png', light: true }
+  },
+
+  // Store links. Leave '' to hide that badge.
+  //   ios     — https://apps.apple.com/…/idXXXXXXXXX
+  //   android — https://play.google.com/store/apps/details?id=your.package.name
+  stores: {
+    epark:   { ios: '', android: '' },
+    kharaj:  { ios: '', android: '' },
+    events:  { ios: '', android: '' },
+    sahha:   { ios: '', android: '' },
+    nomadia: { ios: '', android: '' }
   },
 
   // up to 2 phone screenshots per app — order = display order
@@ -1370,20 +1403,19 @@ const ASSETS = {
     events: []
   },
 
-  // browser screenshots that replace the animated web mockups
+  // browser screenshots that replace the drawn web mockups
   webshots: {
-    luneti:   null,
-    ichaarat: null
+    luneti: 'assets/projects/luneti_web.jpg'
   },
 
-  // "+ ALSO SHIPPED" strip — label + optional logo (falls back to initials)
+  // "+ ALSO SHIPPED" — label, optional logo (falls back to initials), optional store links
   also: [
-    { label: 'Maghasel — 3-app laundry marketplace', logo: 'assets/projects/ms_laundry.png' },
-    { label: 'Al Manassek — Umrah services',         logo: 'assets/projects/manasek_logo.png' },
-    { label: 'Depense — OCR expense scanner',        logo: null },
-    { label: 'Allcarta School — campus management',  logo: 'assets/projects/allcarta_icon.png' },
-    { label: 'Staffy — workforce management',        logo: 'assets/projects/staffy_icon.png' },
-    { label: 'Jeeby — delivery',                     logo: 'assets/projects/jeeby_icon.png' }
+    { label: 'Maghasel — 3-app laundry marketplace', logo: 'assets/projects/ms_laundry.png',   ios: '', android: '' },
+    { label: 'Al Manassek — Umrah services',         logo: 'assets/projects/manasek_logo.png', ios: '', android: '' },
+    { label: 'Depense — OCR expense scanner',        logo: null,                               ios: '', android: '' },
+    { label: 'Allcarta School — campus management',  logo: 'assets/projects/allcarta_icon.png',ios: '', android: '' },
+    { label: 'Staffy — workforce management',        logo: 'assets/projects/staffy_icon.png',  ios: '', android: '' },
+    { label: 'Jeeby — delivery',                     logo: 'assets/projects/jeeby_icon.png',   ios: '', android: '' }
   ]
 };
 
@@ -1396,13 +1428,20 @@ const ASSETS = {
   /* ---------- 1. image slots -------------------------------------- */
   // Points a slot's <img> at a path. Fallback art stays put until the
   // file actually decodes, and comes back if the file 404s.
-  function fill(slot, src) {
-    if (!slot) return;
+  // `entry` is either a path string or { src, light } for dark artwork
+  // that needs a light tile behind it.
+  function fill(slot, entry) {
+    if (!slot || !entry) return;
+    const src   = typeof entry === 'string' ? entry : entry.src;
+    const light = typeof entry === 'object' && entry.light;
     const img = $('img', slot);
     if (!img || !src) return;
-    img.addEventListener('load', () => slot.classList.add('filled'));
+    img.addEventListener('load', () => {
+      slot.classList.add('filled');
+      if (light) slot.classList.add('on-light');
+    });
     img.addEventListener('error', () => {
-      slot.classList.remove('filled');
+      slot.classList.remove('filled', 'on-light');
       img.removeAttribute('src');
     });
     img.src = src;
@@ -1411,27 +1450,59 @@ const ASSETS = {
   fill($('[data-slot="portrait"]'), ASSETS.portrait);
   fill($('[data-slot="castClient"]'), ASSETS.cast.client);
   fill($('[data-slot="castEngineer"]'), ASSETS.cast.engineer);
-  Object.entries(ASSETS.logos).forEach(([k, src]) => {
+  Object.entries(ASSETS.logos).forEach(([k, entry]) => {
     const key = 'logo' + k.charAt(0).toUpperCase() + k.slice(1);
-    fill($('[data-slot="' + key + '"]'), src);
+    fill($('[data-slot="' + key + '"]'), entry);
   });
 
-  /* ---------- 2. "also shipped" strip ------------------------------ */
+  /* ---------- 2. store badges -------------------------------------- */
+  // Apple and Google Play marks, drawn inline so nothing external loads.
+  const GLYPH = {
+    ios: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>',
+    android: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.198l2.807 1.626a1 1 0 010 1.73l-2.808 1.626L15.187 12l2.511-2.491zM5.864 2.658L16.802 8.99l-2.303 2.303-8.635-8.635z"/></svg>'
+  };
+  const LABEL = { ios: 'App Store', android: 'Google Play' };
+
+  function storeLink(kind, href, name, mini) {
+    const a = document.createElement('a');
+    a.className = mini ? 'store-mini' : 'store';
+    a.href = href;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.setAttribute('aria-label', name + ' on the ' + LABEL[kind]);
+    if (mini) a.title = name + ' — ' + LABEL[kind];
+    a.innerHTML = GLYPH[kind] + (mini ? '' : '<span>' + LABEL[kind] + '</span>');
+    return a;
+  }
+
+  Object.entries(ASSETS.stores).forEach(([key, links]) => {
+    const host = $('[data-stores="' + key + '"]');
+    if (!host || !links) return;
+    const name = key.charAt(0).toUpperCase() + key.slice(1);
+    ['ios', 'android'].forEach(kind => {
+      if (links[kind]) host.appendChild(storeLink(kind, links[kind], name, false));
+    });
+  });
+
+  /* ---------- 3. "also shipped" strip ------------------------------ */
   const alsoList = $('#also-list');
   if (alsoList) {
     ASSETS.also.forEach(item => {
-      const initials = item.label.split('—')[0].trim().slice(0, 2);
+      const name = item.label.split('—')[0].trim();
       const el = document.createElement('span');
       el.className = 'also-item';
       el.innerHTML =
-        '<span class="logo-xs slot"><span class="fb">' + initials + '</span><img alt=""></span>' +
+        '<span class="logo-xs slot"><span class="fb">' + name.slice(0, 2) + '</span><img alt=""></span>' +
         '<span>' + item.label + '</span>';
+      ['ios', 'android'].forEach(kind => {
+        if (item[kind]) el.appendChild(storeLink(kind, item[kind], name, true));
+      });
       alsoList.appendChild(el);
       if (item.logo) fill($('.slot', el), item.logo);
     });
   }
 
-  /* ---------- 3. web screenshots ----------------------------------- */
+  /* ---------- 4. web screenshots ----------------------------------- */
   Object.entries(ASSETS.webshots).forEach(([k, src]) => {
     const holder = $('[data-webshot="' + k + '"]');
     if (!holder || !src) return;
@@ -1441,7 +1512,7 @@ const ASSETS = {
     img.src = src;
   });
 
-  /* ---------- 4. scroll reveal ------------------------------------- */
+  /* ---------- 5. scroll reveal ------------------------------------- */
   const revealInView = () => {
     $$('[data-reveal]:not(.rv)').forEach(el => {
       const r = el.getBoundingClientRect();
@@ -1458,7 +1529,7 @@ const ASSETS = {
   addEventListener('resize', revealInView, { passive: true });
   revealInView();
 
-  /* ---------- 5. phone carousels ----------------------------------- */
+  /* ---------- 6. phone carousels ----------------------------------- */
   // Slide 0 is always the animated "live mock" already in the markup.
   // Slides 1..n are screenshots from ASSETS.shots — buttons and autoplay
   // only appear once at least one real screenshot exists.
@@ -1538,7 +1609,7 @@ const ASSETS = {
     }, 5200);
   }
 
-  /* ---------- 6. pointer tilt -------------------------------------- */
+  /* ---------- 7. pointer tilt -------------------------------------- */
   if (matchMedia('(hover: hover)').matches && !reduced) {
     $$('[data-tilt]').forEach(el => {
       const range = parseFloat(el.dataset.tiltRange || '8');
@@ -1559,7 +1630,7 @@ const ASSETS = {
     });
   }
 
-  /* ---------- 7. parallax ------------------------------------------ */
+  /* ---------- 8. parallax ------------------------------------------ */
   const parallaxNodes = $$('[data-parallax]');
   const onParallax = () => {
     parallaxNodes.forEach(el => {
@@ -1575,7 +1646,7 @@ const ASSETS = {
     onParallax();
   }
 
-  /* ---------- 8. story rail ---------------------------------------- */
+  /* ---------- 9. story rail ---------------------------------------- */
   const story = $('[data-story]');
   const storyActive = () => innerWidth > 900;
 
@@ -1634,7 +1705,7 @@ const ASSETS = {
     onStory();
   }
 
-  /* ---------- 9. cursor glow --------------------------------------- */
+  /* ---------- 10. cursor glow --------------------------------------- */
   const glow = $('#glow');
   if (glow && matchMedia('(hover: hover)').matches) {
     addEventListener('mousemove', ev => {
@@ -1642,7 +1713,7 @@ const ASSETS = {
     }, { passive: true });
   }
 
-  /* ---------- 10. year --------------------------------------------- */
+  /* ---------- 11. year --------------------------------------------- */
   const yr = $('#yr');
   if (yr) yr.textContent = new Date().getFullYear();
 })();
