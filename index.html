@@ -779,6 +779,7 @@ button{font:inherit}
 .modal textarea:focus,.modal input:focus{outline:none;border-color:var(--ac);
   box-shadow:0 0 0 3px color-mix(in srgb,var(--ac) 14%,transparent)}
 .fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hp{position:absolute;left:-9999px;top:auto;width:1px;height:1px;opacity:0;pointer-events:none}
 .modal-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:26px}
 .err{font-family:var(--mono);font-size:11.5px;color:#FF8A80;margin:0;flex:1}
 /* make it unmistakable which answer is missing */
@@ -1641,6 +1642,10 @@ button{font:inherit}
             <input type="text" id="hire-name" placeholder="Your name (optional)" autocomplete="name">
             <input type="email" id="hire-email" placeholder="you@company.com" autocomplete="email" required>
           </div>
+          <!-- bot bait: off-screen, untabbable, hidden from assistive tech, so a
+               real visitor can never fill it. Anything in here is a bot. -->
+          <input type="text" id="hire-hp" class="hp" name="_honey" tabindex="-1"
+                 autocomplete="off" aria-hidden="true">
         </fieldset>
 
         <div class="modal-foot">
@@ -1745,10 +1750,11 @@ const ASSETS = {
 
 /* ==================================================================
    CONTACT — where the "Hire me" brief goes.
-   `endpoint` relays the form to `email` without the visitor leaving the
-   page. Set it to '' to always hand off to the visitor's own mail client
-   instead; that mailto hand-off is also the automatic fallback whenever
-   the endpoint is unreachable or not yet activated.
+   The /ajax/ endpoint answers with JSON and never redirects, so the
+   visitor stays on the page. Once the form is activated you can swap the
+   address below for the hashed alias FormSubmit issues (same URL shape,
+   random string instead of the address) — nothing else needs to change.
+   Set `endpoint` to '' to always hand off to the visitor's mail client.
    ================================================================== */
 const CONTACT = {
   email:    'jaafarferes@gmail.com',
@@ -2221,8 +2227,13 @@ const CONTACT = {
         urgency: answers.urgency,
         brief:   $('#hire-brief').value.trim(),
         name:    $('#hire-name').value.trim(),
-        email:   $('#hire-email').value.trim()
+        email:   $('#hire-email').value.trim(),
+        hp:      $('#hire-hp').value
       };
+
+      // A filled honeypot means a bot. Show the same thank-you so it learns
+      // nothing, but send nothing and burn no quota.
+      if (d.hp) { showSent(d); return; }
 
       if (!d.kind)    return fail('Pick what we are building.', $('[data-pick="kind"]'));
       if (!d.urgency) return fail('Let me know how soon you need it.', $('[data-pick="urgency"]'));
@@ -2243,13 +2254,16 @@ const CONTACT = {
         // same call works against FormSubmit, a Google Apps Script web app, or
         // any endpoint on your own VPS, without touching this code.
         const fd = new FormData();
-        fd.append('_subject', 'Project brief — ' + d.kind + ' (' + d.urgency + ')');
+        fd.append('_subject',  'Portfolio enquiry — ' + d.kind + ' · ' + d.urgency);
+        fd.append('_replyto',  d.email);   // Reply in Gmail answers the visitor
         fd.append('_template', 'table');
-        fd.append('name',   d.name || '(not given)');
-        fd.append('email',  d.email);
-        fd.append('type',   d.kind);
-        fd.append('timing', d.urgency);
-        fd.append('brief',  d.brief);
+        fd.append('_captcha',  'false');   // AJAX flow never shows one; avoids a hold
+        fd.append('_honey',    d.hp);      // second line of defence, server side
+        fd.append('name',    d.name || '(not given)');
+        fd.append('email',   d.email);
+        fd.append('project', d.kind);
+        fd.append('timing',  d.urgency);
+        fd.append('message', d.brief);
 
         const res  = await fetch(CONTACT.endpoint, { method: 'POST', body: fd });
         const text = await res.text();
