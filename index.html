@@ -47,6 +47,8 @@
 }
 
 *{box-sizing:border-box}
+/* any class that sets `display` would otherwise out-rank the UA [hidden] rule */
+[hidden]{display:none !important}
 /* clip on BOTH — overflow set only on body propagates to the viewport and
    leaves body itself visible, which lets the decorative glows pan sideways */
 html,body{margin:0;padding:0;background:var(--bg);overflow-x:clip}
@@ -360,6 +362,7 @@ button{font:inherit}
 .tag-blue{color:var(--blue);border-color:#223447}
 .tag-gold{color:var(--gold);border-color:#47401E}
 .tag-pink{color:var(--pink);border-color:#46242F}
+.tag-green{color:var(--green);border-color:#1E4234}
 .tag-ac{color:var(--ac);border-color:color-mix(in srgb,var(--ac) 30%,transparent)}
 .case-title{display:flex;align-items:center;gap:16px;margin-bottom:14px}
 .case-kicker{font-family:var(--mono);font-size:11px;color:var(--dim)}
@@ -374,6 +377,8 @@ button{font:inherit}
 .m-blue:hover{border-color:#7EC8FF66;transform:translateY(-3px)}
 .m-gold:hover{border-color:#EFB63F66;transform:translateY(-3px)}
 .m-pink:hover{border-color:#F28BB466;transform:translateY(-3px)}
+.m-ac:hover{border-color:color-mix(in srgb,var(--ac) 45%,transparent);transform:translateY(-3px)}
+.m-green:hover{border-color:#3AC98E66;transform:translateY(-3px)}
 .case-p{font-size:17px;line-height:1.65;color:var(--muted);margin:0 0 22px;max-width:520px}
 .case-meta{display:flex;gap:28px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:var(--dim);
   border-top:1px solid var(--line);padding-top:16px}
@@ -458,6 +463,34 @@ button{font:inherit}
 .ev-card .b .t{font-size:13px;font-weight:600}
 .ev-card .b .s{font-family:var(--mono);font-size:10px;color:var(--pink);margin-top:4px}
 
+/* live mock — Ichaarat */
+.mock-ichaarat{background:linear-gradient(160deg,#0C1F19,#07140F);padding:50px 13px 13px}
+.ich-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.ich-title{font-size:16px;font-weight:700;letter-spacing:-.01em}
+.ich-bell{position:relative;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;
+  background:#12291F;border:1px solid #1E4234}
+.ich-bell svg{width:13px;height:13px;fill:var(--green)}
+.ich-bell .ping{position:absolute;top:-1px;right:-1px;width:7px;height:7px;border-radius:50%;
+  background:var(--green);animation:pingDot 1.8s ease-out infinite}
+.ich-chips{display:flex;gap:5px;margin-bottom:11px}
+.ich-chips span{font-size:9px;font-family:var(--mono);border-radius:99px;padding:4px 9px}
+.ich-chips .on{background:var(--green);color:#07140F;font-weight:600}
+.ich-chips .off{border:1px solid #1E4234;color:var(--muted)}
+.ich-card{background:#0E241C;border:1px solid #1E4234;border-radius:13px;padding:10px;margin-bottom:8px}
+.ich-card.is-new{border-color:#3AC98E66;animation:nodeGlowGreen 3s ease-in-out infinite}
+@keyframes nodeGlowGreen{0%,100%{box-shadow:0 0 0 0 rgba(58,201,142,0)}50%{box-shadow:0 0 22px -6px rgba(58,201,142,.45)}}
+.ich-org{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.ich-org .av{width:16px;height:16px;border-radius:50%;display:grid;place-items:center;font-size:8px;
+  font-weight:700;flex-shrink:0}
+.ich-org .av.gov{background:var(--green);color:#07140F}
+.ich-org .av.org{background:#1E4234;color:var(--green)}
+.ich-org .nm{font-size:9.5px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ich-org .vf{font-size:8px;color:var(--green)}
+.ich-body{font-size:10px;line-height:1.45;color:var(--muted)}
+.ich-foot{display:flex;align-items:center;gap:7px;margin-top:7px;font-family:var(--mono);font-size:8.5px;color:var(--dim)}
+.tag-new{background:var(--green);color:#07140F;border-radius:99px;padding:2px 6px;font-weight:700;
+  animation:statusBlink 2.4s ease-in-out infinite}
+
 /* ============================================================
    PAIRED CARDS (Sahha / Nomadia)
    ============================================================ */
@@ -509,9 +542,12 @@ button{font:inherit}
    WEB WORK
    ============================================================ */
 .web-grid{display:grid;grid-template-columns:1fr;gap:24px}
-.wcard{background:var(--panel-2);border:1px solid var(--line);border-radius:28px;overflow:hidden;
-  display:flex;flex-direction:column;transition:border-color .3s,transform .3s}
-.wcard-ac:hover{border-color:color-mix(in srgb,var(--ac) 40%,transparent);transform:translateY(-6px)}
+/* a laptop-shaped sibling to the phone rigs — same visual weight, landscape */
+.case-web{grid-template-columns:1fr 540px;padding:40px 0 20px;border-bottom:0}
+.browser-rig{width:100%;max-width:540px;min-width:0}
+.browser{position:relative;width:min(540px,100%);border-radius:18px;background:var(--surface);
+  border:1px solid var(--line-3);overflow:hidden;
+  box-shadow:0 30px 80px -30px rgba(0,0,0,.85),0 0 70px -30px currentColor}
 .chrome{display:flex;align-items:center;gap:8px;padding:14px 18px;border-bottom:1px solid var(--line);
   background:var(--ticker)}
 .chrome i{width:11px;height:11px;border-radius:50%;display:block}
@@ -524,31 +560,26 @@ button{font:inherit}
   aspect-ratio:1440/880;overflow:hidden}
 .wshot .shot{z-index:4;background:var(--panel-2)}
 .wshot .shot img{object-position:top}
-.luneti-mock{position:absolute;inset:0;padding:34px 34px 0}
-.luneti-bar{display:flex;gap:14px;align-items:center;margin-bottom:26px}
-.luneti-bar .logo-txt{font-family:var(--serif);font-style:italic;font-size:24px}
+.luneti-mock{position:absolute;inset:0;padding:20px 20px 0}
+.luneti-bar{display:flex;gap:14px;align-items:center;margin-bottom:16px}
+.luneti-bar .logo-txt{font-family:var(--serif);font-style:italic;font-size:19px}
 .luneti-bar .shopnav{font-size:11px;color:var(--dim);margin-left:auto;font-family:var(--mono);letter-spacing:.06em}
-.luneti-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.luneti-item{border:1px solid var(--line-3);border-radius:14px;padding:20px;background:var(--panel-3)}
-.luneti-item .art{height:74px;display:grid;place-items:center}
-.frame{width:78px;height:27px;border:2.5px solid var(--ac);border-radius:13px 13px 17px 17px;position:relative}
+.luneti-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.luneti-item{border:1px solid var(--line-3);border-radius:12px;padding:11px;background:var(--panel-3)}
+.luneti-item .art{height:46px;display:grid;place-items:center}
+.frame{width:58px;height:20px;border:2px solid var(--ac);border-radius:10px 10px 13px 13px;position:relative}
 .frame i{position:absolute;inset:3px;display:flex;gap:3px}
 .frame i b{flex:1;background:#C6F24E22;border-radius:6px}
-.frame-round{height:25px;border-color:var(--blue);border-radius:99px}
+.frame-round{height:19px;border-color:var(--blue);border-radius:99px}
 .frame-round i b{background:#7EC8FF22;border-radius:99px}
 .frame-square{border-color:var(--pink);border-radius:4px}
 .frame-square i b{background:#F28BB422;border-radius:2px}
 .frame-cat{border-color:var(--gold);border-radius:14px 14px 6px 6px}
 .frame-cat i b{background:#EFB63F22;border-radius:8px 8px 3px 3px}
-.luneti-item .cap{font-size:11px;font-family:var(--mono);color:var(--muted);margin-top:10px}
+.luneti-item .cap{font-size:9.5px;font-family:var(--mono);color:var(--muted);margin-top:7px}
 .luneti-item .cap b{color:var(--text);font-weight:400}
-.wbody{padding:26px}
-.wbody h3{font-size:28px;font-weight:700;letter-spacing:-.02em;margin:0}
-.wbody p{font-size:15px;line-height:1.6;color:var(--muted);margin:0}
-.wbody .org{font-family:var(--mono);font-size:12px;color:var(--dim);margin-top:14px}
-.wbody-wide{display:grid;grid-template-columns:1fr 1fr;gap:40px;padding:34px 34px 38px;align-items:start}
-.wcard-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
-.visit{font-family:var(--mono);font-size:12px;color:var(--ac);text-decoration:none;
+.visit{display:inline-block;margin-bottom:22px;font-family:var(--mono);font-size:12px;color:var(--ac);
+  text-decoration:none;
   border-bottom:1px solid color-mix(in srgb,var(--ac) 35%,transparent);padding-bottom:2px;
   transition:border-color .25s}
 .visit:hover{border-bottom-color:var(--ac)}
@@ -565,6 +596,11 @@ button{font:inherit}
 .store:hover{color:var(--text);border-color:var(--sa,var(--ac));transform:translateY(-2px);
   box-shadow:0 10px 26px -14px var(--sa,var(--ac))}
 .store svg{width:13px;height:13px;fill:currentColor;flex-shrink:0}
+/* an app awaiting store review — shown, but deliberately not a link */
+.store.is-pending{color:var(--dim);border-style:dashed;cursor:default}
+.store.is-pending:hover{transform:none;box-shadow:none;border-color:var(--line-3);color:var(--dim)}
+.store.is-pending svg{opacity:.65}
+.store.is-pending em{font-style:normal;opacity:.8}
 .store:hover svg{fill:var(--sa,var(--ac))}
 /* icon-only variant for the "also shipped" pills */
 .store-mini{display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;
@@ -687,6 +723,95 @@ button{font:inherit}
   .note-orb{width:220px;height:220px;margin:-110px 0 0 -110px}
   #glow{display:none}
 }
+
+/* ============================================================
+   HIRE MODAL — three-question brief
+   ============================================================ */
+@keyframes mdFade{from{opacity:0}to{opacity:1}}
+@keyframes mdRise{from{opacity:0;transform:translateY(26px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes mdPop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes drawCheck{to{stroke-dashoffset:0}}
+@keyframes ringIn{from{transform:scale(.5);opacity:0}to{transform:none;opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.modal{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:24px}
+.modal-backdrop{position:absolute;inset:0;background:rgba(5,7,10,.72);backdrop-filter:blur(7px);
+  -webkit-backdrop-filter:blur(7px);animation:mdFade .3s ease both}
+.modal-card{position:relative;width:min(620px,100%);max-height:calc(100vh - 48px);overflow-y:auto;
+  background:var(--panel-2);border:1px solid var(--line-3);border-radius:26px;padding:38px;
+  box-shadow:0 50px 120px -40px rgba(0,0,0,.95),0 0 90px -50px var(--ac);
+  animation:mdRise .5s cubic-bezier(.2,.7,.2,1) both}
+.modal-card::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;
+  background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--ac) 60%,transparent),transparent)}
+.modal-x{position:absolute;top:18px;right:18px;width:34px;height:34px;border-radius:50%;
+  background:transparent;border:1px solid var(--line-3);color:var(--muted);cursor:pointer;
+  display:grid;place-items:center;font-size:14px;line-height:1;transition:all .25s}
+.modal-x:hover{color:var(--text);border-color:var(--ac);transform:rotate(90deg)}
+.modal-card:focus{outline:none}
+.modal button:focus-visible,.modal input:focus-visible,.modal textarea:focus-visible{
+  outline:2px solid var(--ac);outline-offset:2px}
+.modal-kicker{font-family:var(--mono);font-size:12px;color:var(--ac);margin-bottom:12px}
+.modal-head h3{font-size:clamp(26px,3.4vw,34px);font-weight:700;letter-spacing:-.03em;margin:0;line-height:1.1}
+.modal-head p{font-size:14.5px;line-height:1.6;color:var(--muted);margin:12px 0 0;max-width:42ch}
+.modal form{margin-top:30px}
+.q{border:0;padding:0;margin:0 0 24px;animation:mdPop .5s ease both}
+.q:nth-of-type(1){animation-delay:.06s}.q:nth-of-type(2){animation-delay:.12s}
+.q:nth-of-type(3){animation-delay:.18s}.q:nth-of-type(4){animation-delay:.24s}
+.q legend{font-family:var(--mono);font-size:11px;color:var(--dim);padding:0;margin-bottom:11px;
+  letter-spacing:.06em;text-transform:uppercase}
+.picks{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.picks.two{grid-template-columns:repeat(2,1fr)}
+.pick{display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:left;
+  background:var(--panel-3);border:1px solid var(--line-3);border-radius:15px;padding:14px;
+  color:var(--text);font-size:14px;font-weight:600;cursor:pointer;
+  transition:border-color .25s,transform .25s,background .25s,box-shadow .25s}
+.pick svg{width:18px;height:18px;fill:none;stroke:var(--muted);stroke-width:1.7;transition:stroke .25s}
+.pick small{font-family:var(--mono);font-size:10px;font-weight:400;color:var(--dim);letter-spacing:.03em}
+.pick:hover{border-color:var(--dim);transform:translateY(-2px)}
+.pick[aria-pressed="true"]{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 9%,var(--panel-3));
+  box-shadow:0 12px 30px -18px var(--ac)}
+.pick[aria-pressed="true"] svg{stroke:var(--ac)}
+.pick[aria-pressed="true"] small{color:color-mix(in srgb,var(--ac) 75%,var(--muted))}
+.modal textarea,.modal input{width:100%;background:var(--panel-3);border:1px solid var(--line-3);
+  border-radius:14px;padding:13px 15px;color:var(--text);font-family:var(--sans);font-size:14.5px;
+  transition:border-color .25s,box-shadow .25s;resize:vertical}
+.modal textarea::placeholder,.modal input::placeholder{color:var(--dim)}
+.modal textarea:focus,.modal input:focus{outline:none;border-color:var(--ac);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--ac) 14%,transparent)}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.modal-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:26px}
+.err{font-family:var(--mono);font-size:11.5px;color:#FF8A80;margin:0;flex:1}
+.submit{display:inline-flex;align-items:center;gap:9px;background:var(--ac);color:var(--bg);
+  font-weight:700;font-size:15.5px;padding:15px 28px;border:0;border-radius:14px;cursor:pointer;
+  transition:transform .2s,box-shadow .2s,opacity .2s;margin-left:auto}
+.submit:hover{transform:translateY(-3px);box-shadow:0 16px 40px -12px color-mix(in srgb,var(--ac) 60%,transparent)}
+.submit[disabled]{opacity:.6;cursor:default;transform:none;box-shadow:none}
+.submit .spin{width:14px;height:14px;border:2px solid rgba(11,14,18,.3);border-top-color:var(--bg);
+  border-radius:50%;animation:spin .7s linear infinite}
+.sent{text-align:center;padding:22px 0 6px;animation:mdPop .5s ease both}
+.sent .ring{width:74px;height:74px;margin:0 auto 22px;border-radius:50%;display:grid;place-items:center;
+  background:color-mix(in srgb,var(--ac) 12%,transparent);
+  border:1px solid color-mix(in srgb,var(--ac) 45%,transparent);animation:ringIn .5s cubic-bezier(.2,.7,.2,1) both}
+.sent .ring svg{width:34px;height:34px;fill:none;stroke:var(--ac);stroke-width:2.4;
+  stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:32;stroke-dashoffset:32;
+  animation:drawCheck .55s cubic-bezier(.4,0,.2,1) .22s forwards}
+.sent h3{font-size:27px;font-weight:700;letter-spacing:-.02em;margin:0 0 10px}
+.sent p{font-size:14.5px;line-height:1.6;color:var(--muted);margin:0 auto;max-width:38ch}
+.sent .recap{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+.sent .recap span{font-family:var(--mono);font-size:10.5px;color:var(--ac);
+  border:1px solid color-mix(in srgb,var(--ac) 32%,transparent);border-radius:999px;padding:6px 13px}
+@media (max-width:640px){
+  .modal{padding:12px}
+  .modal-card{padding:26px 20px;border-radius:22px;max-height:calc(100vh - 24px)}
+  .picks,.picks.two,.fields{grid-template-columns:1fr}
+  .submit{width:100%;justify-content:center;margin-left:0}
+  .modal-foot{flex-direction:column-reverse;align-items:stretch}
+  .err{text-align:center}
+}
+@media (prefers-reduced-motion:reduce){
+  .modal *,.modal-card,.modal-backdrop{animation:none !important}
+  .sent .ring svg{stroke-dashoffset:0}
+}
 </style>
 </head>
 <body>
@@ -703,7 +828,7 @@ button{font:inherit}
     <a href="#mobile">Mobile</a>
     <a href="#web">Web</a>
     <a href="#stack" class="hide-sm">Stack</a>
-    <a href="mailto:jaafarferes@gmail.com" class="nav-cta">Hire me</a>
+    <a href="mailto:jaafarferes@gmail.com" class="nav-cta" data-hire>Hire me</a>
   </div>
 </nav>
 
@@ -718,7 +843,7 @@ button{font:inherit}
       idea; I'll bring it to the store.
     </p>
     <div class="hero-actions">
-      <a href="mailto:jaafarferes@gmail.com" class="btn-primary">Start a project →</a>
+      <a href="mailto:jaafarferes@gmail.com" class="btn-primary" data-hire>Start a project →</a>
       <a href="#mobile" class="btn-ghost">See the work</a>
     </div>
     <div class="hero-stats">
@@ -768,7 +893,7 @@ button{font:inherit}
             </div>
           </div>
           <div class="hero-btns">
-            <a class="a" href="mailto:jaafarferes@gmail.com">Hire →</a>
+            <a class="a" href="mailto:jaafarferes@gmail.com" data-hire>Hire →</a>
             <a class="b" href="#mobile">Projects</a>
           </div>
         </div>
@@ -1089,12 +1214,12 @@ button{font:inherit}
       </div>
       <div class="metrics">
         <div class="metric m-gold"><div class="n">4</div><div class="l">ROLE APPS</div></div>
-        <div class="metric m-gold"><div class="n">~40%</div><div class="l">OF CODEBASE</div></div>
-        <div class="metric m-gold"><div class="n">50%</div><div class="l">OF UNIT TESTS</div></div>
+        <div class="metric m-gold"><div class="n">LIVE</div><div class="l">ON PLAY STORE</div></div>
+        <div class="metric m-gold"><div class="n">MVVM</div><div class="l">+ UNIT TESTS</div></div>
       </div>
       <p class="case-p">A live-bidding produce exchange split across four native Android apps — buyer, marketer,
         supervisor and transporter. Online auctions, Moyasar payments, invoicing, and voice-note negotiation baked
-        into chat. I wrote ~40% of the code and half the unit tests, and led the View Binding + Gradle migration.</p>
+        into chat. I built the suite and led the View Binding + Gradle migration.</p>
       <div class="stores" data-stores="kharaj" style="--sa:var(--gold)"></div>
       <div class="case-meta">
         <span>ROLE — <b>Lead mobile developer</b></span>
@@ -1123,12 +1248,12 @@ button{font:inherit}
         </div>
       </div>
       <div class="metrics">
-        <div class="metric m-pink"><div class="n">50%</div><div class="l">OF CODEBASE</div></div>
+        <div class="metric m-pink"><div class="n">GPS</div><div class="l">VENUE DISCOVERY</div></div>
         <div class="metric m-pink"><div class="n">2</div><div class="l">PAYMENT GATEWAYS</div></div>
         <div class="metric m-pink"><div class="n">LIVE</div><div class="l">ON PLAY STORE</div></div>
       </div>
       <p class="case-p">Wedding-booking app for Saudi Arabia: GPS-based venue discovery, cart-to-reservation flow,
-        and Google Pay + Moyasar checkout. I built half the codebase and carried it to its Play Store release.</p>
+        and Google Pay + Moyasar checkout. I built it and carried it to its Play Store release.</p>
       <div class="stores" data-stores="events" style="--sa:var(--pink)"></div>
       <div class="case-meta">
         <span>ROLE — <b>Lead mobile developer</b></span>
@@ -1160,6 +1285,79 @@ button{font:inherit}
         </div>
       </div>
       <div class="dots" data-dots="events"></div>
+    </div>
+  </div>
+
+  <!-- Ichaarat -->
+  <div class="case case-l" data-reveal>
+    <div class="rig" data-tilt data-tilt-range="9" data-carousel="ichaarat"
+         style="--pc:var(--green);--pc-ink:#07140F;--ry0:7deg;--ry:7deg">
+      <div class="rig-back right" data-back="ichaarat"></div>
+      <div class="phone" data-parallax="18">
+        <div class="phone-screen">
+          <div class="mock mock-ichaarat">
+            <div class="ich-top">
+              <span class="ich-title">Notices</span>
+              <span class="ich-bell">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a6 6 0 00-6 6v3.6L4.5 15h15L18 11.6V8a6 6 0 00-6-6zm0 20a2.8 2.8 0 002.8-2.5H9.2A2.8 2.8 0 0012 22z"/></svg>
+                <i class="ping"></i>
+              </span>
+            </div>
+            <div class="ich-chips">
+              <span class="on">All</span><span class="off">Government</span><span class="off">Private</span>
+            </div>
+            <div class="ich-card is-new">
+              <div class="ich-org"><span class="av gov">G</span><span class="nm">Ministry of Interior</span><span class="vf">✓</span></div>
+              <div class="ich-body">Road closure — King Fahd Rd, Sat 06:00–14:00</div>
+              <div class="ich-foot"><span class="tag-new">NEW</span><span>2 min ago</span></div>
+            </div>
+            <div class="ich-card">
+              <div class="ich-org"><span class="av org">B</span><span class="nm">Barsha Technology</span><span class="vf">✓</span></div>
+              <div class="ich-body">Scheduled maintenance window announced</div>
+              <div class="ich-foot"><span>1 h ago</span></div>
+            </div>
+            <div class="mock-cta" style="background:var(--green);color:#07140F">Follow organisation</div>
+          </div>
+          <div class="phone-notch"></div>
+        </div>
+      </div>
+      <div class="dots" data-dots="ichaarat"></div>
+    </div>
+
+    <div>
+      <div class="tags">
+        <span class="tag tag-green">FLUTTER · RIVERPOD</span>
+        <span class="tag">CLEAN ARCHITECTURE</span>
+        <span class="tag">NESTJS · TYPEORM</span>
+        <span class="tag">PHONE OTP · JWT</span>
+      </div>
+      <div class="case-title">
+        <div class="logo slot" data-slot="logoIchaarat">
+          <div class="fb" style="color:var(--green)">Ic</div>
+          <img alt="Ichaarat logo">
+        </div>
+        <div>
+          <div class="case-kicker">CASE STUDY 04 · JUST LAUNCHED</div>
+          <h3>Ichaarat <span>· official notices, end to end</span></h3>
+        </div>
+      </div>
+      <div class="metrics">
+        <div class="metric m-green"><div class="n">3</div><div class="l">ACCOUNT ROLES</div></div>
+        <div class="metric m-green"><div class="n">OTP</div><div class="l">PHONE AUTH · JWT</div></div>
+        <div class="metric m-green"><div class="n">NEW</div><div class="l">LIVE ON PLAY STORE</div></div>
+      </div>
+      <p class="case-p">Government bodies and private organisations publish official announcements; citizens
+        follow only the ones that matter to them. A multi-role Flutter client — citizen, government and
+        private-organisation accounts with branch management and moderation — built feature-first over Clean
+        Architecture with Riverpod, go_router and Dio. I built the NestJS + TypeORM backend behind it too:
+        phone-OTP sign-in, JWT sessions in secure storage, role-based routing and Swagger-documented APIs on
+        a Dockerised deploy.</p>
+      <div class="stores" data-stores="ichaarat" style="--sa:var(--green)"></div>
+      <div class="case-meta">
+        <span>ROLE — <b>Mobile + backend</b></span>
+        <span>TEAM — <b>Barsha Technology</b></span>
+        <span>STATUS — <span class="ok">live ✓</span></span>
+      </div>
     </div>
   </div>
 
@@ -1236,61 +1434,80 @@ button{font:inherit}
 
   <div class="web-grid">
     <!-- Luneti -->
-    <div class="wcard wcard-ac" data-reveal>
-      <div class="chrome">
-        <i class="r"></i><i class="y"></i><i class="g"></i>
-        <span class="url">luneti.tn — eyewear e-commerce</span>
-      </div>
-      <div class="wshot">
-        <!-- fallback storefront, shown until webshots.luneti loads -->
-        <div class="luneti-mock">
-          <div class="luneti-bar">
-            <span class="logo-txt">luneti</span>
-            <span class="shopnav">SOLAIRE · OPTIQUE · CLIP-ON · NOUVEAUTÉS</span>
+    <div class="case case-web" data-reveal>
+      <div>
+        <div class="tags">
+          <span class="tag tag-ac">NEXT.JS · REACT</span>
+          <span class="tag">NODE · EXPRESS · MONGODB</span>
+          <span class="tag">FIREBASE AUTH</span>
+          <span class="tag">DOCKER · NGINX · OVH VPS</span>
+          <span class="tag">GA4 · GTM · META PIXEL</span>
+        </div>
+        <div class="case-title">
+          <div class="logo slot" data-slot="logoLuneti">
+            <div class="fb" style="color:var(--ac)">Lu</div>
+            <img alt="Luneti logo">
           </div>
-          <div class="luneti-grid">
-            <div class="luneti-item">
-              <div class="art"><div class="frame"><i><b></b><b></b></i></div></div>
-              <div class="cap">Emmy<br><b>101 Dt</b></div>
-            </div>
-            <div class="luneti-item">
-              <div class="art"><div class="frame frame-round"><i><b></b><b></b></i></div></div>
-              <div class="cap">Emery<br><b>102 Dt</b></div>
-            </div>
-            <div class="luneti-item">
-              <div class="art"><div class="frame frame-square"><i><b></b><b></b></i></div></div>
-              <div class="cap">Antony<br><b>98 Dt</b></div>
-            </div>
-            <div class="luneti-item">
-              <div class="art"><div class="frame frame-cat"><i><b></b><b></b></i></div></div>
-              <div class="cap">Silvia<br><b>102 Dt</b></div>
-            </div>
+          <div>
+            <div class="case-kicker">CASE STUDY 05 · WEB</div>
+            <h3>Luneti <span>· eyewear e-commerce, Tunisia</span></h3>
           </div>
         </div>
-        <div class="shot" data-webshot="luneti"></div>
-      </div>
-      <div class="wbody wbody-wide">
-        <div>
-          <div class="tags">
-            <span class="tag tag-ac">NEXT.JS 14 · REACT 18</span>
-            <span class="tag">EXPRESS · MONGODB</span>
-            <span class="tag">FLOUCI PAY · DOCKER</span>
-          </div>
-          <div class="wcard-head">
-            <div class="logo-sm slot" data-slot="logoLuneti">
-              <div class="fb" style="color:var(--ac)">Lu</div>
-              <img alt="Luneti logo">
-            </div>
-            <h3>Luneti</h3>
-          </div>
-          <a class="visit" href="https://www.luneti.tn/" target="_blank" rel="noopener">luneti.tn ↗</a>
+        <div class="metrics">
+          <div class="metric m-ac"><div class="n">301</div><div class="l">WIX → NEXT.JS REDIRECTS</div></div>
+          <div class="metric m-ac"><div class="n">GA4</div><div class="l">FULL COMMERCE FUNNEL</div></div>
+          <div class="metric m-ac"><div class="n">LIVE</div><div class="l">SELF-HOSTED, SSL</div></div>
         </div>
-        <div>
-          <p>Full-stack eyewear store built solo: Next.js storefront, Express + MongoDB API, guest checkout,
-            COD + Flouci payments, Cloudinary media, admin panel — deployed on a VPS with Docker &amp; nginx.
-            Live in Tunisia with optique, solaire and clip-on catalogues, a frame-shape finder and a
-            face-shape guide.</p>
-          <div class="org">Independent project · design → deploy</div>
+        <p class="case-p">Built and shipped solo, design to deploy. Next.js + React storefront on a
+          Node/Express + MongoDB API with Firebase auth, favourites, cart, guest checkout, order tracking
+          and an admin dashboard driving inventory and back-in-stock workflows. I moved the brand off Wix
+          with permanent 301 redirects and a DNS cutover so it kept its search rankings, then put it on an
+          OVH VPS — isolated Docker services behind Nginx, Let's Encrypt SSL and a Content Security Policy.
+          GA4, Tag Manager and Meta Pixel track the whole funnel: product views, search, cart, checkout
+          and purchase.</p>
+        <a class="visit" href="https://www.luneti.tn/" target="_blank" rel="noopener">Visit luneti.tn ↗</a>
+        <div class="case-meta">
+          <span>ROLE — <b>Solo full-stack &amp; infrastructure</b></span>
+          <span>TEAM — <b>Independent project</b></span>
+          <span>STATUS — <span class="ok">live ✓</span></span>
+        </div>
+      </div>
+
+      <div class="rig browser-rig" data-tilt data-tilt-range="6"
+           style="--pc:var(--ac);--ry0:4deg;--ry:4deg">
+        <div class="browser" data-parallax="14">
+          <div class="chrome">
+            <i class="r"></i><i class="y"></i><i class="g"></i>
+            <span class="url">luneti.tn</span>
+          </div>
+          <div class="wshot">
+            <!-- drawn storefront, shown until webshots.luneti loads -->
+            <div class="luneti-mock">
+              <div class="luneti-bar">
+                <span class="logo-txt">luneti</span>
+                <span class="shopnav">SOLAIRE · OPTIQUE · CLIP-ON</span>
+              </div>
+              <div class="luneti-grid">
+                <div class="luneti-item">
+                  <div class="art"><div class="frame"><i><b></b><b></b></i></div></div>
+                  <div class="cap">Emmy<br><b>101 Dt</b></div>
+                </div>
+                <div class="luneti-item">
+                  <div class="art"><div class="frame frame-round"><i><b></b><b></b></i></div></div>
+                  <div class="cap">Emery<br><b>102 Dt</b></div>
+                </div>
+                <div class="luneti-item">
+                  <div class="art"><div class="frame frame-square"><i><b></b><b></b></i></div></div>
+                  <div class="cap">Antony<br><b>98 Dt</b></div>
+                </div>
+                <div class="luneti-item">
+                  <div class="art"><div class="frame frame-cat"><i><b></b><b></b></i></div></div>
+                  <div class="cap">Silvia<br><b>102 Dt</b></div>
+                </div>
+              </div>
+            </div>
+            <div class="shot" data-webshot="luneti"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -1351,6 +1568,84 @@ button{font:inherit}
   </div>
 </footer>
 
+<!-- ============================ HIRE MODAL ============================ -->
+<div class="modal" id="hire" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="hire-title" tabindex="-1">
+    <button class="modal-x" type="button" data-close aria-label="Close">✕</button>
+
+    <div class="modal-pane" id="hire-pane">
+      <div class="modal-head">
+        <div class="modal-kicker">START A PROJECT</div>
+        <h3 id="hire-title">Tell me what you're <span class="ital" style="color:var(--ac)">building</span>.</h3>
+        <p>Three quick questions — takes about a minute. I read every one myself and reply within a day.</p>
+      </div>
+
+      <form id="hire-form" novalidate>
+        <fieldset class="q">
+          <legend>What are we building?</legend>
+          <div class="picks" data-pick="kind">
+            <button type="button" class="pick" data-value="Mobile app" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M10.5 18.5h3"/></svg>
+              Mobile app<small>IOS · ANDROID</small>
+            </button>
+            <button type="button" class="pick" data-value="Web app" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="4" width="19" height="14" rx="2.5"/><path d="M2.5 8.5h19M8 21h8"/></svg>
+              Web app<small>SITE · DASHBOARD</small>
+            </button>
+            <button type="button" class="pick" data-value="Mobile + web" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="13" height="10" rx="2"/><rect x="15" y="9" width="6.5" height="11" rx="2"/></svg>
+              Both<small>FULL PLATFORM</small>
+            </button>
+          </div>
+        </fieldset>
+
+        <fieldset class="q">
+          <legend>How soon do you need it?</legend>
+          <div class="picks two" data-pick="urgency">
+            <button type="button" class="pick" data-value="Urgent" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4.5 13.5H11l-1 8.5 8.5-11.5H12l1-8.5Z"/></svg>
+              Urgent<small>NEEDS TO MOVE NOW</small>
+            </button>
+            <button type="button" class="pick" data-value="Not urgent" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.5l3.5 2"/></svg>
+              No rush<small>PLANNING AHEAD</small>
+            </button>
+          </div>
+        </fieldset>
+
+        <fieldset class="q">
+          <legend>What do you have in mind?</legend>
+          <textarea id="hire-brief" rows="4"
+            placeholder="A booking app for my clinic — patients pick a slot, pay online, and staff see it on a dashboard. Rough idea, no spec yet."></textarea>
+        </fieldset>
+
+        <fieldset class="q">
+          <legend>Where should I reply?</legend>
+          <div class="fields">
+            <input type="text" id="hire-name" placeholder="Your name (optional)" autocomplete="name">
+            <input type="email" id="hire-email" placeholder="you@company.com" autocomplete="email" required>
+          </div>
+        </fieldset>
+
+        <div class="modal-foot">
+          <p class="err" id="hire-err" role="alert" hidden></p>
+          <button type="submit" class="submit" id="hire-submit">Send it <span aria-hidden="true">→</span></button>
+        </div>
+      </form>
+    </div>
+
+    <div class="sent" id="hire-sent" hidden>
+      <div class="ring">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12.5 10 18 19.5 6.5"/></svg>
+      </div>
+      <h3>Got it — thanks.</h3>
+      <p id="hire-sent-msg">Your brief landed in my inbox. I'll come back to you within a day, usually sooner.</p>
+      <div class="recap" id="hire-recap"></div>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ==================================================================
    ASSETS — the only block you edit when new logos / screenshots land.
@@ -1382,25 +1677,31 @@ const ASSETS = {
     events:  'assets/projects/events_icon.png',
     sahha:   null,                               // drop a file in assets/projects/
     nomadia: 'assets/projects/nomadia_icon.jpeg',
-    luneti:  { src: 'assets/projects/luneti_icon.png', light: true }
+    luneti:  { src: 'assets/projects/luneti_icon.png', light: true },
+    ichaarat: 'assets/projects/ichaarat_icon.png'
   },
 
   // Store links. Leave '' to hide that badge.
   //   ios     — https://apps.apple.com/…/idXXXXXXXXX
   //   android — https://play.google.com/store/apps/details?id=your.package.name
   stores: {
-    epark:   { ios: '', android: '' },
-    kharaj:  { ios: '', android: '' },
-    events:  { ios: '', android: '' },
+    epark:   { ios: 'https://apps.apple.com/us/app/e-park/id6738445935',
+               android: 'https://play.google.com/store/apps/details?id=com.barsha.epark' },
+    kharaj:  { ios: '', android: 'https://play.google.com/store/apps/details?id=com.barcha.kharaaj' },
+    events:  { ios: '', android: 'https://play.google.com/store/apps/details?id=com.eventssa.android' },
     sahha:   { ios: '', android: '' },
-    nomadia: { ios: '', android: '' }
+    nomadia: { ios: '', android: '' },
+    // iOS build is sitting in Apple review — shown as a dashed, non-clickable chip
+    ichaarat: { ios: '', iosNote: 'in review',
+                android: 'https://play.google.com/store/apps/details?id=com.barsha.ichaarat' }
   },
 
   // up to 2 phone screenshots per app — order = display order
   shots: {
-    epark:  [],   // e.g. ['assets/projects/epark/1.png','assets/projects/epark/2.png']
-    kharaj: [],
-    events: []
+    epark:    [],   // e.g. ['assets/projects/epark/1.png','assets/projects/epark/2.png']
+    kharaj:   [],
+    events:   [],
+    ichaarat: []
   },
 
   // browser screenshots that replace the drawn web mockups
@@ -1410,13 +1711,25 @@ const ASSETS = {
 
   // "+ ALSO SHIPPED" — label, optional logo (falls back to initials), optional store links
   also: [
-    { label: 'Maghasel — 3-app laundry marketplace', logo: 'assets/projects/ms_laundry.png',   ios: '', android: '' },
+    { label: 'Maghasel — 3-app laundry marketplace', logo: 'assets/projects/ms_laundry.png',   ios: '', android: 'https://play.google.com/store/apps/details?id=dev.barshaTech.maghasel' },
     { label: 'Al Manassek — Umrah services',         logo: 'assets/projects/manasek_logo.png', ios: '', android: '' },
     { label: 'Depense — OCR expense scanner',        logo: null,                               ios: '', android: '' },
     { label: 'Allcarta School — campus management',  logo: 'assets/projects/allcarta_icon.png',ios: '', android: '' },
     { label: 'Staffy — workforce management',        logo: 'assets/projects/staffy_icon.png',  ios: '', android: '' },
     { label: 'Jeeby — delivery',                     logo: 'assets/projects/jeeby_icon.png',   ios: '', android: '' }
   ]
+};
+
+/* ==================================================================
+   CONTACT — where the "Hire me" brief goes.
+   `endpoint` relays the form to `email` without the visitor leaving the
+   page. Set it to '' to always hand off to the visitor's own mail client
+   instead; that mailto hand-off is also the automatic fallback whenever
+   the endpoint is unreachable or not yet activated.
+   ================================================================== */
+const CONTACT = {
+  email:    'jaafarferes@gmail.com',
+  endpoint: 'https://formsubmit.co/ajax/jaafarferes@gmail.com'
 };
 
 (function () {
@@ -1480,7 +1793,13 @@ const ASSETS = {
     if (!host || !links) return;
     const name = key.charAt(0).toUpperCase() + key.slice(1);
     ['ios', 'android'].forEach(kind => {
-      if (links[kind]) host.appendChild(storeLink(kind, links[kind], name, false));
+      if (links[kind]) { host.appendChild(storeLink(kind, links[kind], name, false)); return; }
+      const note = links[kind + 'Note'];
+      if (!note) return;                       // no link, no note → nothing at all
+      const chip = document.createElement('span');
+      chip.className = 'store is-pending';
+      chip.innerHTML = GLYPH[kind] + '<span>' + LABEL[kind] + ' · <em>' + note + '</em></span>';
+      host.appendChild(chip);
     });
   });
 
@@ -1534,9 +1853,10 @@ const ASSETS = {
   // Slides 1..n are screenshots from ASSETS.shots — buttons and autoplay
   // only appear once at least one real screenshot exists.
   const CAR = {
-    epark:  { ink: '#0B0E12' },
-    kharaj: { ink: '#12100A' },
-    events: { ink: '#130A0F' }
+    epark:    { ink: '#0B0E12' },
+    kharaj:   { ink: '#12100A' },
+    events:   { ink: '#130A0F' },
+    ichaarat: { ink: '#07140F' }
   };
   const state = {};
 
@@ -1716,6 +2036,147 @@ const ASSETS = {
   /* ---------- 11. year --------------------------------------------- */
   const yr = $('#yr');
   if (yr) yr.textContent = new Date().getFullYear();
+
+  /* ---------- 12. hire modal --------------------------------------- */
+  const modal = $('#hire');
+  if (modal) {
+    const form    = $('#hire-form');
+    const pane    = $('#hire-pane');
+    const sent    = $('#hire-sent');
+    const errEl   = $('#hire-err');
+    const submit  = $('#hire-submit');
+    const answers = { kind: '', urgency: '' };
+    let lastFocus = null;
+
+    const fail = msg => {
+      errEl.textContent = msg;
+      errEl.hidden = false;
+    };
+    const clearFail = () => { errEl.hidden = true; };
+
+    function open(ev) {
+      if (ev) ev.preventDefault();
+      lastFocus = document.activeElement;
+      modal.hidden = false;
+      document.documentElement.style.overflowY = 'hidden';
+      $('.modal-card', modal).focus({ preventScroll: true });
+    }
+
+    function close() {
+      modal.hidden = true;
+      document.documentElement.style.overflowY = '';
+      if (lastFocus) lastFocus.focus({ preventScroll: true });
+    }
+
+    $$('[data-hire]').forEach(el => el.addEventListener('click', open));
+    $$('[data-close]', modal).forEach(el => el.addEventListener('click', close));
+
+    addEventListener('keydown', ev => {
+      if (modal.hidden) return;
+      if (ev.key === 'Escape') { close(); return; }
+      if (ev.key !== 'Tab') return;
+      // keep focus inside the dialog while it is open
+      const f = $$('button, input, textarea, [href]', modal).filter(el => el.offsetParent !== null);
+      if (!f.length) return;
+      const first = f[0], last = f[f.length - 1];
+      if (ev.shiftKey && document.activeElement === first) { ev.preventDefault(); last.focus(); }
+      else if (!ev.shiftKey && document.activeElement === last) { ev.preventDefault(); first.focus(); }
+    });
+
+    // single-select button groups
+    $$('[data-pick]', modal).forEach(group => {
+      const key = group.dataset.pick;
+      $$('.pick', group).forEach(btn => {
+        btn.addEventListener('click', () => {
+          $$('.pick', group).forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+          answers[key] = btn.dataset.value;
+          clearFail();
+        });
+      });
+    });
+
+    const FALLBACK_NOTE = 'Your mail app should have opened with the brief filled in — just hit send. ' +
+      'If nothing opened, email me at ' + CONTACT.email + ' and paste it there.';
+
+    const body = d =>
+      'New project brief from jaafarfares.github.io\n\n' +
+      'Type:    ' + d.kind + '\n' +
+      'Timing:  ' + d.urgency + '\n' +
+      'Name:    ' + (d.name || '—') + '\n' +
+      'Email:   ' + d.email + '\n\n' +
+      'Brief:\n' + d.brief + '\n';
+
+    // Hand the finished brief to the visitor's own mail client. Uses a real
+    // anchor rather than location.href so the page itself never navigates.
+    function handOffToMail(d, note) {
+      const a = document.createElement('a');
+      a.href = 'mailto:' + CONTACT.email +
+        '?subject=' + encodeURIComponent('Project brief — ' + d.kind + ' (' + d.urgency + ')') +
+        '&body=' + encodeURIComponent(body(d));
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      showSent(d, note);
+    }
+
+    function showSent(d, note) {
+      pane.hidden = true;
+      sent.hidden = false;
+      if (note) $('#hire-sent-msg').textContent = note;
+      $('#hire-recap').innerHTML =
+        '<span>' + d.kind + '</span><span>' + d.urgency + '</span>';
+      sent.scrollIntoView({ block: 'nearest' });
+    }
+
+    form.addEventListener('submit', async ev => {
+      ev.preventDefault();
+      clearFail();
+
+      const d = {
+        kind:    answers.kind,
+        urgency: answers.urgency,
+        brief:   $('#hire-brief').value.trim(),
+        name:    $('#hire-name').value.trim(),
+        email:   $('#hire-email').value.trim()
+      };
+
+      if (!d.kind)    return fail('Pick what we are building.');
+      if (!d.urgency) return fail('Let me know how soon you need it.');
+      if (d.brief.length < 10) return fail('Tell me a little more about the idea.');
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email)) return fail('That email does not look right.');
+
+      submit.disabled = true;
+      const label = submit.innerHTML;
+      submit.innerHTML = '<span class="spin"></span> Sending…';
+
+      if (!CONTACT.endpoint) { handOffToMail(d); return; }
+
+      try {
+        const res = await fetch(CONTACT.endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            _subject: 'Project brief — ' + d.kind + ' (' + d.urgency + ')',
+            name:  d.name || '(not given)',
+            email: d.email,
+            type:  d.kind,
+            timing: d.urgency,
+            brief: d.brief
+          })
+        });
+        const out = await res.json().catch(() => ({}));
+        if (res.ok && String(out.success) === 'true') { showSent(d); return; }
+        // endpoint reachable but not delivering (e.g. awaiting activation)
+        handOffToMail(d, FALLBACK_NOTE);
+      } catch (e) {
+        handOffToMail(d, FALLBACK_NOTE);
+      } finally {
+        submit.disabled = false;
+        submit.innerHTML = label;
+      }
+    });
+  }
 })();
 </script>
 </body>
