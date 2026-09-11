@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Jaafar Fares — Mobile &amp; Web Engineer</title>
-<meta name="description" content="Lead mobile engineer. Six years of Flutter, Kotlin and full-stack web — from parking gates that open over SSE to laundry marketplaces with three-sided apps.">
+<title>Jaafar Fares — Full-Stack Developer</title>
+<meta name="description" content="Full-stack developer — mobile and web. Six years of Flutter, Kotlin, NestJS and Next.js, from parking gates that open over SSE to live storefronts and marketplaces.">
 <meta name="theme-color" content="#0B0E12">
 <link rel="icon" href="assets/img/favv.png">
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="Jaafar Fares — Mobile &amp; Web Engineer">
+<meta property="og:title" content="Jaafar Fares — Full-Stack Developer">
 <meta property="og:description" content="I ship apps people actually use. Flutter · Kotlin · NestJS · Next.js">
 <meta property="og:image" content="assets/img/jaafar-portrait.jpeg">
 
@@ -781,6 +781,9 @@ button{font:inherit}
 .fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .modal-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:26px}
 .err{font-family:var(--mono);font-size:11.5px;color:#FF8A80;margin:0;flex:1}
+/* make it unmistakable which answer is missing */
+.modal .invalid{border-color:#FF8A80;box-shadow:0 0 0 3px rgba(255,138,128,.13)}
+.picks.invalid .pick{border-color:#FF8A80}
 .submit{display:inline-flex;align-items:center;gap:9px;background:var(--ac);color:var(--bg);
   font-weight:700;font-size:15.5px;padding:15px 28px;border:0;border-radius:14px;cursor:pointer;
   transition:transform .2s,box-shadow .2s,opacity .2s;margin-left:auto}
@@ -800,6 +803,18 @@ button{font:inherit}
 .sent .recap{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px}
 .sent .recap span{font-family:var(--mono);font-size:10.5px;color:var(--ac);
   border:1px solid color-mix(in srgb,var(--ac) 32%,transparent);border-radius:999px;padding:6px 13px}
+/* shown only when the relay could not take it — the brief stays recoverable */
+.sent-fallback{margin-top:24px;text-align:left}
+.fb-row{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
+.fb-mail,.fb-copy{font-family:var(--mono);font-size:11.5px;padding:9px 16px;border-radius:999px;
+  cursor:pointer;text-decoration:none;border:1px solid var(--line-3);background:transparent;
+  color:var(--muted);transition:color .25s,border-color .25s,transform .25s}
+.fb-mail{background:var(--ac);border-color:var(--ac);color:var(--bg);font-weight:700}
+.fb-mail:hover{transform:translateY(-2px)}
+.fb-copy:hover{color:var(--text);border-color:var(--ac)}
+.fb-text{background:var(--panel-3);border:1px solid var(--line-3);border-radius:14px;padding:14px 16px;
+  font-family:var(--mono);font-size:11px;line-height:1.75;color:var(--muted);white-space:pre-wrap;
+  max-height:190px;overflow:auto;margin:0}
 @media (max-width:640px){
   .modal{padding:12px}
   .modal-card{padding:26px 20px;border-radius:22px;max-height:calc(100vh - 24px)}
@@ -838,9 +853,9 @@ button{font:inherit}
     <div class="badge"><span class="dot"></span>OPEN FOR FREELANCE — 2026</div>
     <h1>I ship apps<br>people <span class="ital" style="color:var(--ac)">actually</span> use.</h1>
     <p class="hero-lede">
-      Hey, I'm <strong>Jaafar Fares</strong> — lead mobile engineer. Six years of Flutter, Kotlin and full-stack
-      web, from parking gates that open over SSE to laundry marketplaces with three-sided apps. You bring the
-      idea; I'll bring it to the store.
+      Hey, I'm <strong>Jaafar Fares</strong> — full-stack developer, mobile and web. Six years of Flutter,
+      Kotlin, NestJS and Next.js, from parking gates that open over SSE to live storefronts and three-sided
+      marketplaces. You bring the idea; I'll build and ship the whole thing.
     </p>
     <div class="hero-actions">
       <a href="mailto:jaafarferes@gmail.com" class="btn-primary" data-hire>Start a project →</a>
@@ -1617,7 +1632,7 @@ button{font:inherit}
         <fieldset class="q">
           <legend>What do you have in mind?</legend>
           <textarea id="hire-brief" rows="4"
-            placeholder="A booking app for my clinic — patients pick a slot, pay online, and staff see it on a dashboard. Rough idea, no spec yet."></textarea>
+            placeholder="What should it do, and who is it for? A rough idea is plenty."></textarea>
         </fieldset>
 
         <fieldset class="q">
@@ -1642,6 +1657,14 @@ button{font:inherit}
       <h3>Got it — thanks.</h3>
       <p id="hire-sent-msg">Your brief landed in my inbox. I'll come back to you within a day, usually sooner.</p>
       <div class="recap" id="hire-recap"></div>
+
+      <div class="sent-fallback" id="hire-fallback" hidden>
+        <div class="fb-row">
+          <a class="fb-mail" id="fb-mailto" href="#">Open mail app</a>
+          <button class="fb-copy" id="fb-copy" type="button">Copy the brief</button>
+        </div>
+        <pre class="fb-text" id="fb-text"></pre>
+      </div>
     </div>
   </div>
 </div>
@@ -2048,15 +2071,42 @@ const CONTACT = {
     const answers = { kind: '', urgency: '' };
     let lastFocus = null;
 
-    const fail = msg => {
+    let sentOnce = false;
+
+    // Point at the field that is actually missing — an error line on its own
+    // reads as "the form is broken" when the offending answer is off-screen.
+    const fail = (msg, el) => {
       errEl.textContent = msg;
       errEl.hidden = false;
+      if (!el) return;
+      el.classList.add('invalid');
+      const focusable = el.matches('input, textarea') ? el : $('.pick', el);
+      if (focusable) focusable.focus({ preventScroll: true });
+      el.scrollIntoView({ block: 'center', behavior: 'smooth' });
     };
-    const clearFail = () => { errEl.hidden = true; };
+
+    const clearFail = () => {
+      errEl.hidden = true;
+      $$('.invalid', modal).forEach(el => el.classList.remove('invalid'));
+    };
+
+    function resetForm() {
+      form.reset();
+      answers.kind = '';
+      answers.urgency = '';
+      $$('.pick', modal).forEach(b => b.setAttribute('aria-pressed', 'false'));
+      sentOnce = false;
+    }
 
     function open(ev) {
       if (ev) ev.preventDefault();
       lastFocus = document.activeElement;
+      // a second enquiry should start on the form, not on the last thank-you
+      if (sentOnce) resetForm();
+      pane.hidden = false;
+      sent.hidden = true;
+      $('#hire-fallback').hidden = true;
+      clearFail();
       modal.hidden = false;
       document.documentElement.style.overflowY = 'hidden';
       $('.modal-card', modal).focus({ preventScroll: true });
@@ -2095,8 +2145,8 @@ const CONTACT = {
       });
     });
 
-    const FALLBACK_NOTE = 'Your mail app should have opened with the brief filled in — just hit send. ' +
-      'If nothing opened, email me at ' + CONTACT.email + ' and paste it there.';
+    const FALLBACK_NOTE = 'Your mail app should have opened with this ready to send. If it did not, ' +
+      'copy the brief below and send it to ' + CONTACT.email + ' — it reaches me either way.';
 
     const body = d =>
       'New project brief from jaafarfares.github.io\n\n' +
@@ -2109,25 +2159,58 @@ const CONTACT = {
     // Hand the finished brief to the visitor's own mail client. Uses a real
     // anchor rather than location.href so the page itself never navigates.
     function handOffToMail(d, note) {
-      const a = document.createElement('a');
-      a.href = 'mailto:' + CONTACT.email +
+      const text = body(d);
+      const href = 'mailto:' + CONTACT.email +
         '?subject=' + encodeURIComponent('Project brief — ' + d.kind + ' (' + d.urgency + ')') +
-        '&body=' + encodeURIComponent(body(d));
+        '&body=' + encodeURIComponent(text);
+
+      const a = document.createElement('a');
+      a.href = href;
       a.style.display = 'none';
       document.body.appendChild(a);
       a.click();
       a.remove();
+
+      // and leave it on screen, copyable, in case no mail client answered
+      $('#fb-text').textContent = text;
+      $('#fb-mailto').href = href;
+      $('#hire-fallback').hidden = false;
       showSent(d, note);
     }
 
     function showSent(d, note) {
+      sentOnce = true;
       pane.hidden = true;
       sent.hidden = false;
-      if (note) $('#hire-sent-msg').textContent = note;
+      $('#hire-sent h3').textContent = note ? 'Almost there —' : 'Got it — thanks.';
+      $('#hire-sent-msg').textContent = note ||
+        "Your brief landed in my inbox. I'll come back to you within a day, usually sooner.";
       $('#hire-recap').innerHTML =
         '<span>' + d.kind + '</span><span>' + d.urgency + '</span>';
       sent.scrollIntoView({ block: 'nearest' });
     }
+
+    ['#hire-brief', '#hire-email', '#hire-name'].forEach(sel => {
+      const el = $(sel);
+      if (el) el.addEventListener('input', () => { if (!errEl.hidden) clearFail(); });
+    });
+
+    const copyBtn = $('#fb-copy');
+    if (copyBtn) copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText($('#fb-text').textContent);
+        copyBtn.textContent = 'Copied ✓';
+      } catch (e) {
+        // clipboard blocked — select it so the visitor can copy by hand
+        const r = document.createRange();
+        r.selectNodeContents($('#fb-text'));
+        const sel = getSelection();
+        sel.removeAllRanges();
+        sel.addRange(r);
+        copyBtn.textContent = 'Selected — press ⌘C';
+      }
+      setTimeout(() => { copyBtn.textContent = 'Copy the brief'; }, 2600);
+    });
 
     form.addEventListener('submit', async ev => {
       ev.preventDefault();
@@ -2141,10 +2224,13 @@ const CONTACT = {
         email:   $('#hire-email').value.trim()
       };
 
-      if (!d.kind)    return fail('Pick what we are building.');
-      if (!d.urgency) return fail('Let me know how soon you need it.');
-      if (d.brief.length < 10) return fail('Tell me a little more about the idea.');
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email)) return fail('That email does not look right.');
+      if (!d.kind)    return fail('Pick what we are building.', $('[data-pick="kind"]'));
+      if (!d.urgency) return fail('Let me know how soon you need it.', $('[data-pick="urgency"]'));
+      if (!d.brief)   return fail('Add a line about what you want built.', $('#hire-brief'));
+      if (d.brief.length < 8)
+        return fail('A sentence or two helps me give you a straight answer.', $('#hire-brief'));
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email))
+        return fail(d.email ? 'That email address looks off.' : 'Where should I send the reply?', $('#hire-email'));
 
       submit.disabled = true;
       const label = submit.innerHTML;
