@@ -2239,20 +2239,28 @@ const CONTACT = {
       if (!CONTACT.endpoint) { handOffToMail(d); return; }
 
       try {
-        const res = await fetch(CONTACT.endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({
-            _subject: 'Project brief — ' + d.kind + ' (' + d.urgency + ')',
-            name:  d.name || '(not given)',
-            email: d.email,
-            type:  d.kind,
-            timing: d.urgency,
-            brief: d.brief
-          })
-        });
-        const out = await res.json().catch(() => ({}));
-        if (res.ok && String(out.success) === 'true') { showSent(d); return; }
+        // FormData keeps this a CORS "simple request" — no preflight — so the
+        // same call works against FormSubmit, a Google Apps Script web app, or
+        // any endpoint on your own VPS, without touching this code.
+        const fd = new FormData();
+        fd.append('_subject', 'Project brief — ' + d.kind + ' (' + d.urgency + ')');
+        fd.append('_template', 'table');
+        fd.append('name',   d.name || '(not given)');
+        fd.append('email',  d.email);
+        fd.append('type',   d.kind);
+        fd.append('timing', d.urgency);
+        fd.append('brief',  d.brief);
+
+        const res  = await fetch(CONTACT.endpoint, { method: 'POST', body: fd });
+        const text = await res.text();
+        let out = {};
+        try { out = JSON.parse(text); } catch (e) { /* not JSON — handled below */ }
+
+        // Only treat it as delivered on an explicit success. FormSubmit answers
+        // 200 with success:"false" while a form is still awaiting activation.
+        const delivered = res.ok &&
+          (String(out.success) === 'true' || String(out.result) === 'success' || out.ok === true);
+        if (delivered) { showSent(d); return; }
         // endpoint reachable but not delivering (e.g. awaiting activation)
         handOffToMail(d, FALLBACK_NOTE);
       } catch (e) {
