@@ -134,7 +134,11 @@ button{font:inherit}
 .nav-brand .tilde{color:var(--ac)}
 .nav-brand .name{font-weight:600}
 .nav-caret{width:9px;height:18px;background:var(--ac);display:inline-block;animation:blink 1.1s steps(1) infinite}
-.nav-links{display:flex;gap:26px;font-size:14px;color:var(--muted);align-items:center}
+.nav-links{display:flex;gap:26px;font-size:14px;color:var(--muted);align-items:center;margin-left:auto}
+.nav-links .nn{display:none}
+.nav-end{display:flex;align-items:center;margin-left:26px}
+.nav-toggle{display:none}
+section[id]{scroll-margin-top:72px}
 .nav-links a{color:var(--muted);text-decoration:none;transition:color .2s}
 .nav-links a:hover{color:var(--text)}
 .nav-cta{color:var(--bg) !important;background:var(--ac);text-decoration:none;font-weight:600;
@@ -230,6 +234,9 @@ button{font:inherit}
 .story-inner{position:sticky;top:0;height:100vh;display:grid;grid-template-columns:minmax(240px,300px) 1fr;
   gap:50px;align-items:center;max-width:1280px;margin:0 auto;padding:0 60px}
 .story-kicker{font-family:var(--mono);font-size:13px;color:var(--ac);margin-bottom:30px}
+.story-progress{display:none;gap:6px}
+.story-progress i{flex:1;height:3px;border-radius:3px;background:var(--line-3);transition:background .5s ease}
+.story-progress i.on{background:var(--ac)}
 .steps{display:flex;flex-direction:column;gap:22px}
 .step{display:flex;gap:16px;transition:opacity .5s ease,transform .5s ease;opacity:.32}
 .step.on{opacity:1;transform:translateX(6px)}
@@ -652,8 +659,12 @@ button{font:inherit}
    ============================================================ */
 @media (max-width:1100px){
   .hero{grid-template-columns:1fr;padding:70px 40px 60px;gap:70px}
-  .hero-art{--ry:0deg}
+  .hero-art{--ry:0deg;padding-top:84px}
   .hero-phone{width:min(300px,70vw)}
+  /* single-column hero: sit the terminal inside the art's own space
+     instead of floating up into the stats above it */
+  .hero-term{top:0}
+  .hero-seal{top:6px}
   .sec,.foot{padding-left:40px;padding-right:40px}
   .stack-grid{grid-template-columns:1fr 1fr}
   .wbody-wide{gap:28px;padding:28px}
@@ -661,23 +672,39 @@ button{font:inherit}
 @media (max-width:900px){
   .nav{padding:14px 20px}
   .nav-links{gap:16px;font-size:13px}
-  /* story unrolls into a plain stack — no scroll-jacking on small screens */
-  .story{height:auto}
-  .story-inner{position:static;height:auto;display:block;padding:70px 40px}
-  .steps{margin-bottom:50px}
-  .step{opacity:1}
-  .step .bar{background:var(--ac)}
-  .stage{height:auto;min-height:0;display:flex;flex-direction:column;gap:60px;transform:none}
-  .cast{display:none}
-  .act{position:static;opacity:1;transform:none;padding-bottom:0;display:block}
-  .note-card{transform:none}
-  /* connectors are drawn on a fixed 560x300 grid — once the nodes reflow they
-     no longer line up, so drop them and let the stack speak for itself */
-  .arch svg{display:none}
-  .arch-col{gap:22px}
-  .case,.case-r,.case-l{grid-template-columns:1fr;gap:50px;padding:60px 0}
-  .case-l .rig,.case-r .rig{grid-row:1}
-  .case-l>div:last-child,.case-r>div:first-child{grid-row:2}
+  .nav-end{margin-left:16px}
+  /* story keeps its scroll-driven stage: one sticky screen, the active step
+     crossfades above it under a progress bar, and each act is scaled to fit */
+  .story{height:420vh;height:420svh}
+  /* stretch, not the desktop grid's center: in a flex column `center` would
+     shrink the stage (all absolute children) to zero width */
+  .story-inner{top:0;height:100vh;height:100svh;display:flex;flex-direction:column;gap:16px;
+    align-items:stretch;padding:calc(var(--navh,62px) + 20px) 40px 16px}
+  .story-inner>div:first-child{display:flex;flex-direction:column;gap:12px}
+  .story-kicker{margin-bottom:0}
+  .story-progress{display:flex}
+  .steps{display:grid;gap:0}
+  .step{grid-area:1/1;opacity:0;transform:translateY(10px);pointer-events:none}
+  .step.on{opacity:1;transform:none;pointer-events:auto}
+  .step .bar{display:none}
+  .stage{flex:1;min-height:0;height:auto;transform:none}
+  /* a definite column, so `width:min(…,100%)` on the act content resolves —
+     in an auto track the percentage collapses to min-content */
+  .act{padding-bottom:100px;grid-template-columns:minmax(0,1fr)}
+  .act>*{transform:scale(var(--fit,1));transform-origin:center center}
+  .char-client{width:54px}
+  .char-eng{width:60px}
+  .char .pic{border-radius:14px}
+  .char .cap{font-size:8.5px;margin-top:5px}
+  .char-idea{left:70px;width:28px;height:28px;bottom:22%}
+  .node-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%}
+  .node-sm{padding:10px 6px;min-width:0}
+  .node-sm .t{font-size:12.5px}
+  .node-sm .s{font-size:9px}
+  .arch-col{gap:28px}
+  .case,.case-r,.case-l,.case-web{grid-template-columns:1fr;gap:50px;padding:60px 0}
+  .case-l .rig,.case-r .rig,.case-web .rig{grid-row:1}
+  .case-l>div:last-child,.case-r>div:first-child,.case-web>div:first-child{grid-row:2}
   .pair{grid-template-columns:1fr;padding:60px 0 0}
   .stack-grid{grid-template-columns:1fr}
   .wbody-wide{grid-template-columns:1fr;gap:22px;padding:26px}
@@ -692,14 +719,37 @@ button{font:inherit}
 @media (max-width:640px){
   .nav{padding:12px 16px}
   .nav-brand{font-size:12px}
-  .nav-links{gap:12px;font-size:12px}
-  .nav-links .hide-sm{display:none}
-  .nav-cta{padding:8px 14px}
-  .hero{padding:50px 18px 40px;gap:56px}
-  .hero-stats{gap:24px}
+  .nav-cta{padding:9px 16px}
+  /* links fold into a themed drop-down; Hire me stays in the bar */
+  .nav-end{margin-left:0}
+  .nav-toggle{display:block;position:relative;width:38px;height:38px;margin-left:10px;border-radius:50%;
+    border:1px solid var(--line-3);background:transparent;cursor:pointer;transition:border-color .25s}
+  .nav-toggle i{position:absolute;left:11px;right:11px;height:1.5px;border-radius:2px;background:var(--text);
+    transition:transform .3s cubic-bezier(.2,.7,.2,1),top .3s cubic-bezier(.2,.7,.2,1)}
+  .nav-toggle i:first-child{top:15px}
+  .nav-toggle i:last-child{top:21px}
+  .nav.open .nav-toggle{border-color:var(--ac)}
+  .nav.open .nav-toggle i:first-child{top:18px;transform:rotate(45deg)}
+  .nav.open .nav-toggle i:last-child{top:18px;transform:rotate(-45deg)}
+  .nav-links{position:absolute;top:100%;left:0;right:0;margin:0;flex-direction:column;align-items:stretch;
+    gap:0;padding:6px 18px 16px;background:var(--bg);
+    border-bottom:1px solid var(--line);box-shadow:0 30px 60px -30px rgba(0,0,0,.9);
+    opacity:0;visibility:hidden;transform:translateY(-8px);pointer-events:none;
+    transition:opacity .28s ease,transform .28s cubic-bezier(.2,.7,.2,1),visibility 0s linear .28s}
+  .nav.open .nav-links{opacity:1;visibility:visible;transform:none;pointer-events:auto;
+    transition:opacity .28s ease,transform .28s cubic-bezier(.2,.7,.2,1)}
+  .nav-links a{display:flex;align-items:baseline;gap:14px;padding:15px 2px;font-size:22px;font-weight:600;
+    letter-spacing:-.02em;color:var(--text);border-bottom:1px solid var(--line)}
+  .nav-links a:last-child{border-bottom:0}
+  .nav-links .nn{display:inline;font-family:var(--mono);font-size:12px;font-weight:400;color:var(--ac);letter-spacing:0}
+  .hero{padding:50px 18px 40px;gap:48px}
+  .hero-stats{display:grid;grid-template-columns:repeat(3,auto);justify-content:space-between;gap:14px}
   .hero-stats .n{font-size:26px}
-  .hero-seal{width:82px;height:82px;top:-30px;right:4px}
-  .hero-term{display:none}
+  .hero-stats .l{font-size:10px;line-height:1.35}
+  .hero-art{padding-top:72px}
+  .hero-seal{width:78px;height:78px;top:-6px;right:-2px}
+  .hero-term{left:calc(50% - 28px);width:170px;margin-left:-85px;padding:11px 12px;font-size:9px;
+    line-height:1.8;transform:translateZ(-40px) rotateX(10deg)}
   .sec,.story-inner{padding-left:18px;padding-right:18px}
   .foot{padding:70px 18px 34px}
   .sec-head{margin-bottom:44px}
@@ -714,14 +764,54 @@ button{font:inherit}
   .step .h{font-size:20px}
   .note-quote{font-size:22px}
   .testimonial .q{font-size:21px}
-  .ship{grid-template-columns:1fr;justify-items:center}
+  /* the shipped act keeps phone + stats side by side, just smaller */
+  .ship{grid-template-columns:auto auto;gap:12px}
+  .ship-phone{width:132px;height:240px;border-radius:26px;padding:8px}
+  .ship-screen{border-radius:20px}
+  .ship-notch{width:54px;height:15px}
+  .ship-sheet{left:8px;right:8px;bottom:9px;padding:10px;border-radius:14px}
+  .ship-sheet .t{font-size:11.5px}
+  .ship-stats{gap:9px}
+  .ship-stat,.ship-stat-ac{min-width:0;padding:10px 12px}
+  .ship-stat .n{font-size:23px}
+  .ship-stat .l,.ship-stat-ac .l{font-size:9.5px}
+  .ship-stat-ac .n{font-size:16px}
+  /* metric cards stay on one row, as on desktop */
+  .metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .metric{padding:11px 10px;min-width:0}
+  .metric .n{font-size:19px}
+  .metric .l{font-size:9px;line-height:1.4;letter-spacing:.01em}
   .foot-base{justify-content:center;text-align:center}
-  .luneti-bar .shopnav{display:none}
+  .luneti-bar .shopnav{font-size:8.5px}
   .store{font-size:10px;padding:7px 12px}
   /* the big ambient glows are sized for desktop — shrink so they stay on-screen */
   .hero-orb{width:300px;height:300px;margin:-150px 0 0 -150px}
   .note-orb{width:220px;height:220px;margin:-110px 0 0 -110px}
-  #glow{display:none}
+}
+/* short landscape phones: not enough height for a sticky stage, so the
+   story unrolls into a plain stack instead */
+@media (max-width:900px) and (max-height:520px){
+  .story{height:auto}
+  .story-inner{position:static;height:auto;display:block;padding:60px 40px}
+  .story-inner>div:first-child{display:block}
+  .story-kicker{margin-bottom:30px}
+  .story-progress{display:none}
+  .steps{display:flex;flex-direction:column;gap:22px;margin-bottom:46px}
+  .step{grid-area:auto;opacity:1;transform:none;pointer-events:auto}
+  .step .bar{display:block;background:var(--ac)}
+  .stage{height:auto;min-height:0;display:flex;flex-direction:column;gap:56px}
+  .cast{display:none}
+  .act{position:static;opacity:1;transform:none;padding-bottom:0;display:block}
+  .act>*{transform:none}
+}
+/* no cursor to follow on touch screens — let the ambient glow drift instead */
+@keyframes glowRoam{
+  0%,100%{transform:translate3d(-24vw,-20vh,0)}
+  33%{transform:translate3d(22vw,4vh,0)}
+  66%{transform:translate3d(-6vw,24vh,0)}
+}
+@media (hover:none){
+  #glow{left:50%;top:40%;margin:-260px 0 0 -260px;animation:glowRoam 18s ease-in-out infinite}
 }
 
 /* ============================================================
@@ -840,11 +930,16 @@ button{font:inherit}
     <span class="tilde">~/</span><span class="name">jaafar.fares</span>
     <span class="nav-caret"></span>
   </div>
-  <div class="nav-links">
-    <a href="#mobile">Mobile</a>
-    <a href="#web">Web</a>
-    <a href="#stack" class="hide-sm">Stack</a>
+  <div class="nav-links" id="nav-menu">
+    <a href="#mobile"><span class="nn">01</span>Mobile</a>
+    <a href="#web"><span class="nn">02</span>Web</a>
+    <a href="#stack"><span class="nn">03</span>Stack</a>
+  </div>
+  <div class="nav-end">
     <a href="mailto:jaafarferes@gmail.com" class="nav-cta" data-hire>Hire me</a>
+    <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-menu">
+      <i></i><i></i>
+    </button>
   </div>
 </nav>
 
@@ -937,6 +1032,7 @@ button{font:inherit}
   <div class="story-inner">
     <div>
       <div class="story-kicker">HOW AN IDEA BECOMES A PRODUCT</div>
+      <div class="story-progress" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
       <div class="steps">
         <div class="step on" data-step="0">
           <div class="bar"></div>
@@ -1997,7 +2093,9 @@ const CONTACT = {
 
   /* ---------- 9. story rail ---------------------------------------- */
   const story = $('[data-story]');
-  const storyActive = () => innerWidth > 900;
+  // Sticky, scroll-driven at every width — except short landscape phones,
+  // where the CSS unrolls the story (keep this in step with that media query).
+  const storyActive = () => innerWidth > 900 || innerHeight > 520;
 
   if (story) {
     const acts  = $$('[data-act]', story);
@@ -2008,7 +2106,48 @@ const CONTACT = {
       engineer: $('[data-char="engineer"]', story)
     };
     const ease = t => (t < 0 ? 0 : t > 1 ? 1 : t * t * (3 - 2 * t));
+    const progress = $$('.story-progress i', story);
+    const stage = $('.stage', story);
+    const arch  = $('.arch', story);
     let last = -1;
+
+    // On narrow screens scale each act down just enough to clear the cast.
+    function fitActs() {
+      acts.forEach(a => a.style.removeProperty('--fit'));
+      if (innerWidth > 900 || !storyActive() || !stage) return;
+      const pad    = parseFloat(getComputedStyle(acts[0]).paddingBottom) || 0;
+      const availH = stage.clientHeight - pad - 12;
+      const availW = stage.clientWidth;
+      acts.forEach(a => {
+        const c = a.firstElementChild;
+        if (!c || !c.offsetHeight) return;
+        const k = Math.min(1, availH / c.offsetHeight, availW / c.offsetWidth);
+        a.style.setProperty('--fit', Math.max(0.5, k).toFixed(3));
+      });
+    }
+
+    // Draw the architecture connectors from where the nodes actually sit, so
+    // they line up at any width. Offsets are layout-space, so the act's
+    // transition transforms and fit scale do not skew them.
+    function drawArch() {
+      if (!arch) return;
+      const svg = $('svg', arch), g = svg && $('g', svg);
+      const top = $('.node-ac', arch), mid = $('.node-blue', arch), leaves = $$('.node-sm', arch);
+      if (!g || !top || !mid || !arch.offsetWidth) return;
+      const at = el => {
+        let x = 0, y = 0, n = el;
+        while (n && n !== arch) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; }
+        return { cx: x + el.offsetWidth / 2, top: y, bottom: y + el.offsetHeight };
+      };
+      const a = at(top), b = at(mid);
+      let d = '<path d="M' + a.cx + ' ' + a.bottom + ' L' + b.cx + ' ' + b.top + '"></path>';
+      leaves.forEach(l => {
+        const c = at(l);
+        d += '<path d="M' + b.cx + ' ' + b.bottom + ' L' + c.cx + ' ' + c.top + '"></path>';
+      });
+      svg.setAttribute('viewBox', '0 0 ' + arch.offsetWidth + ' ' + arch.offsetHeight);
+      g.innerHTML = d;
+    }
 
     function moveCast(p) {
       if (!cast.client) return;
@@ -2024,9 +2163,15 @@ const CONTACT = {
 
       cast.idea.style.opacity = handoff < 0.02 ? 0 : (1 - ease((p - 0.44) / 0.14));
       const stageW = cast.idea.parentElement.clientWidth || 500;
+      const wide   = innerWidth > 900;
+      // desktop keeps the original flight path; narrow stages fly the idea
+      // exactly from its start point to the engineer
+      const travel = wide ? stageW - 260
+        : stageW - cast.idea.offsetLeft - cast.engineer.offsetWidth - cast.idea.offsetWidth;
+      const arc = wide ? 70 : 46;
       cast.idea.style.transform =
-        'translate(' + (handoff * (stageW - 260)).toFixed(1) + 'px,' +
-        (-Math.sin(handoff * Math.PI) * 70).toFixed(1) + 'px) ' +
+        'translate(' + (handoff * travel).toFixed(1) + 'px,' +
+        (-Math.sin(handoff * Math.PI) * arc).toFixed(1) + 'px) ' +
         'scale(' + (0.7 + handoff * 0.8).toFixed(2) + ')';
 
       const eng = ease((p - 0.12) / 0.16);
@@ -2047,11 +2192,15 @@ const CONTACT = {
       last = act;
       acts.forEach(el => el.classList.toggle('on', +el.dataset.act === act));
       steps.forEach(el => el.classList.toggle('on', +el.dataset.step === act));
+      progress.forEach((el, i) => el.classList.toggle('on', i <= act));
     };
 
+    const relayout = () => { drawArch(); fitActs(); last = -1; onStory(); };
     addEventListener('scroll', onStory, { passive: true });
-    addEventListener('resize', () => { last = -1; onStory(); }, { passive: true });
-    onStory();
+    addEventListener('resize', relayout, { passive: true });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(relayout);
+    addEventListener('load', relayout);
+    relayout();
   }
 
   /* ---------- 10. cursor glow --------------------------------------- */
@@ -2060,6 +2209,31 @@ const CONTACT = {
     addEventListener('mousemove', ev => {
       glow.style.transform = 'translate(' + (ev.clientX - 260) + 'px,' + (ev.clientY - 260) + 'px)';
     }, { passive: true });
+  }
+
+  /* ---------- 10b. nav: height var + mobile menu ------------------- */
+  const navEl  = $('.nav');
+  const toggle = $('.nav-toggle');
+  const setNavH = () => {
+    if (navEl) document.documentElement.style.setProperty('--navh', navEl.offsetHeight + 'px');
+  };
+  setNavH();
+  addEventListener('resize', setNavH, { passive: true });
+
+  if (navEl && toggle) {
+    const setMenu = open => {
+      navEl.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    };
+    toggle.addEventListener('click', () => setMenu(!navEl.classList.contains('open')));
+    // a menu link or Hire me both leave the menu closed behind them
+    $$('.nav-links a, .nav-cta', navEl).forEach(a => a.addEventListener('click', () => setMenu(false)));
+    addEventListener('keydown', ev => { if (ev.key === 'Escape') setMenu(false); });
+    document.addEventListener('click', ev => {
+      if (navEl.classList.contains('open') && !navEl.contains(ev.target)) setMenu(false);
+    });
+    addEventListener('resize', () => { if (innerWidth > 640) setMenu(false); }, { passive: true });
   }
 
   /* ---------- 11. year --------------------------------------------- */
